@@ -1,37 +1,28 @@
-import { NgModule }      from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
-import { HttpModule }    from '@angular/http';
+import {NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {FormsModule} from '@angular/forms';
+import {HttpModule} from '@angular/http';
 
-import { AppRoutingModule } from './app-routing.module';
+import {routes} from './app-routing.module';
 
-// Imports for loading & configuring the in-memory web api
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService }  from './in-memory-data.service';
-
-import { AppComponent }         from './app.component';
-import { DashboardComponent }   from './dashboard.component';
-import { HeroesComponent }      from './heroes.component';
-import { HeroDetailComponent }  from './hero-detail.component';
-import { HeroService }          from './hero.service';
-import { HeroSearchComponent }  from './hero-search.component';
+import {AppComponent} from './app.component';
+import {HeroesModule} from './heroes/heroes.module';
+import {AuctionsModule} from './auctions/auctions.module';
+import {PreloadAllModules, RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    InMemoryWebApiModule.forRoot(InMemoryDataService),
-    AppRoutingModule
+    HeroesModule,
+    AuctionsModule,
+    RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],
   declarations: [
     AppComponent,
-    DashboardComponent,
-    HeroDetailComponent,
-    HeroesComponent,
-    HeroSearchComponent
   ],
-  providers: [ HeroService ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
