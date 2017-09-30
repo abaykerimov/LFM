@@ -1,94 +1,75 @@
-<div class="list-group">
-  <a href="#" class="list-group-item">
-    <h4 class="list-group-item-heading">List group item heading</h4>
-    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-      varius blandit.</p>
-  </a>
-  <a href="#" class="list-group-item">
-    <h4 class="list-group-item-heading">List group item heading</h4>
-    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-      varius blandit.</p>
+<button class="btn btn-success" (click)="openModal()">Создать аукцион</button>
+<hr>
+<div class="list-group" *ngFor="let auction of data">
+  <a [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
+    <p class="list-group-item-heading" [innerHTML]="auction.title"></p>
+    <p class="list-group-item-text description"><i class="glyphicon glyphicon-info-sign"></i>{{auction.description}}</p>
+    <div style="margin-top: 10px;">
+      <p class="list-group-item-text description"><i class="glyphicon glyphicon-user"></i>{{auction.owner['first_name'] + ' ' + auction.owner['last_name']}}<span class="offers-count count"><i class="glyphicon glyphicon-comment"></i>{{auction.offers.length}}</span></p>
+    </div>
   </a>
 </div>
 
-<button class="btn btn-success" data-toggle="modal" data-target="#addModal">Create</button>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="addModal">
-  <div class="modal-dialog">
+<div bsModal #addModal="bs-modal" id="addModal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="addAuctionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Modal title</h4>
+        <h5 class="modal-title pull-left">Укажите игрока и клуб</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="addModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
         <form #form="ngForm" (ngSubmit)="save(form)" class="form-horizontal">
-          <!--<div class="form-group">-->
-          <!--<label class="col-md-2 control-label" for="player-title">Игрок</label>-->
-          <!--<div class="col-md-10">-->
-          <!--<ng-select class="players" id="player-title" name="player_id"-->
-          <!--[items]="players"-->
-          <!--(selected)="setPlayerItem($event)"-->
-          <!--placeholder="Искать игрока" [ngModel]="players"></ng-select>-->
-          <!--</div>-->
-          <!--</div>-->
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="player-title">Игрок</label>
+            <div class="col-md-10">
+              <ng-select class="players" id="player-title" name="player_id"
+                         [items]="player.all"
+                         (selected)="setItem('player', $event)"
+                         (typed)="search($event)"
+                         placeholder="Искать игрока..." ngModel required></ng-select>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="player.skill !== 0">
+            <div class="infos">
+              <label class="col-md-2 control-label title">Клуб</label>
+              <p class="col-md-10 info" [innerHTML]="player.team"></p>
+            </div>
+            <div class="infos">
+              <label class="col-md-2 control-label title">Скилл</label>
+              <p class="col-md-10 info" [innerHTML]="player.skill"></p>
+            </div>
+            <div class="infos">
+              <label class="col-md-2 control-label title">Позиция</label>
+              <p class="col-md-10 info" [innerHTML]="player.position"></p>
+            </div>
+            <div class="infos">
+              <label class="col-md-2 control-label title">Возраст</label>
+              <p class="col-md-10 info" [innerHTML]="player.age"></p>
+            </div>
+            <div class="infos">
+              <label class="col-md-2 control-label title">Стоимость</label>
+              <p class="col-md-10 info" [innerHTML]="player.cost + ' млн.'"></p>
+            </div>
+          </div>
           <div class="form-group">
             <label class="col-md-2 control-label" for="team-title">Ваш клуб</label>
             <div class="col-md-10">
               <ng-select class="teams" id="team-title" name="team_id"
-                         [items]="teams"
-                         (selected)="setPlayerItem($event)"
-                         (typed)="teamSearch($event)"
-                         placeholder="Искать клуб"></ng-select>
+                         [items]="team.all"
+                         (selected)="setItem('team', $event)"
+                         (typed)="search($event)"
+                         placeholder="Искать клуб..." ngModel required></ng-select>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
-            <button type="submit" class="btn btn-success" [disabled]="!form.valid">Сохранить</button>
+            <button type="submit" class="btn btn-success" [disabled]="!form.valid">Создать аукцион</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="addModal.hide()">Закрыть</button>
           </div>
         </form>
       </div>
     </div>
   </div>
 </div>
-
-
-<!--<div bsModal #addModal="bs-modal" id="addModal" class="modal fade" tabindex="-1" role="dialog"-->
-     <!--aria-labelledby="addAuctionModalLabel" aria-hidden="true">-->
-  <!--<div class="modal-dialog modal-lg">-->
-    <!--<div class="modal-content">-->
-      <!--<div class="modal-header">-->
-        <!--<h4 class="modal-title pull-left">Укажите игрока и клуб, к которому он должен перейти</h4>-->
-        <!--<button type="button" class="close pull-right" aria-label="Close" (click)="addModal.hide()">-->
-          <!--<span aria-hidden="true">&times;</span>-->
-        <!--</button>-->
-      <!--</div>-->
-      <!--<div class="modal-body">-->
-        <!--<form #form="ngForm" (ngSubmit)="save(form)" class="form-horizontal">-->
-          <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
-            <!--&lt;!&ndash;<label class="col-md-2 control-label" for="player-title">Игрок</label>&ndash;&gt;-->
-            <!--&lt;!&ndash;<div class="col-md-10">&ndash;&gt;-->
-              <!--&lt;!&ndash;<ng-select class="players" id="player-title" name="player_id"&ndash;&gt;-->
-                         <!--&lt;!&ndash;[items]="players"&ndash;&gt;-->
-                         <!--&lt;!&ndash;(selected)="setPlayerItem($event)"&ndash;&gt;-->
-                         <!--&lt;!&ndash;placeholder="Искать игрока" [ngModel]="players"></ng-select>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-          <!--&lt;!&ndash;</div>&ndash;&gt;-->
-          <!--<div class="form-group">-->
-            <!--<label class="col-md-2 control-label" for="team-title">Ваш клуб</label>-->
-            <!--<div class="col-md-10">-->
-              <!--<ng-select class="teams" id="team-title" name="team_id"-->
-                         <!--[items]="teams"-->
-                         <!--(selected)="setPlayerItem($event)"-->
-                         <!--(typed)="teamSearch($event)"-->
-                         <!--placeholder="Искать клуб" [ngModel]="teams"></ng-select>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="modal-footer">-->
-            <!--<button type="button" class="btn btn-danger" data-dismiss="modal" (click)="addModal.hide()">Закрыть</button>-->
-            <!--<button type="submit" class="btn btn-success" [disabled]="!form.valid">Сохранить</button>-->
-          <!--</div>-->
-        <!--</form>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</div>-->

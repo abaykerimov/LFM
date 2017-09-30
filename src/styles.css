@@ -1,59 +1,50 @@
-/* Master Styles */
-h1 {
-  color: #369;
-  font-size: 250%;
-}
-h2, h3 {
-  color: #444;
-  font-weight: lighter;
-}
 body {
-  margin: 2em;
-}
-body, input[text], button {
-  color: #888;
-}
-a {
-  cursor: pointer;
-}
-button {
-  background-color: #eee;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button:hover {
-  background-color: #cfd8dc;
-}
-button:disabled {
-  background-color: #eee;
-  color: #aaa;
-  cursor: auto;
-}
-
-/* Navigation link styles */
-nav a {
-  padding: 5px 10px;
-  text-decoration: none;
-  margin-right: 10px;
-  margin-top: 10px;
-  display: inline-block;
-  background-color: #eee;
-  border-radius: 4px;
-}
-nav a:visited, a:link {
-  color: #607D8B;
-}
-nav a:hover {
-  color: #039be5;
-  background-color: #CFD8DC;
-}
-nav a.active {
-  color: #039be5;
-}
-
-/* everywhere else */
-* {
+  padding-top: 9em;
   font-family: Roboto, sans-serif !important;
 }
+
+.glyphicon {
+  margin-right: 5px;
+}
+auctions .form-group .info {
+  margin-top: 7px;
+  margin-bottom: 0;
+}
+
+auctions ng-select span {
+  margin-right: 5px;
+}
+
+auctions .players-list p {
+  font-size: 18px;
+}
+
+auctions .players-list p.description {
+  font-size: 12px;
+}
+@media (max-width: 992px) {
+  auctions .form-group .info {
+    width: 60%;
+    display: inline-block;
+  }
+  auctions .col-md-2.title {
+    width: 20%;
+  }
+  auctions .players-list p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 458px) {
+  auctions .col-md-2.title {
+    width: 30%;
+  }
+  auctions .players-list p {
+    font-size: 14px;
+  }
+}
+
+auctions .players-list .offers-count {
+  float: right;
+}
+

@@ -8,6 +8,7 @@ import 'rxjs/add/observable/throw';
 import {Subject} from 'rxjs/Subject';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import {Router} from '@angular/router';
+import {env} from "../../../.env";
 
 @Injectable()
 export class AuctionsService {
@@ -16,10 +17,11 @@ export class AuctionsService {
   public paramsString = '';
   private url;
   private stateParams = {};
+
   private updateAuctions = new Subject<boolean>();
 
   constructor(private http: Http, public toastr: ToastsManager, private router: Router) {
-    this.url = 'http://kerimov.kz/api/';
+    this.url = env('apiUrl');
     this.resetParams();
   }
 
@@ -50,7 +52,7 @@ export class AuctionsService {
         }
       }
     }
-    // console.log(parameters);
+    console.log(parameters);
     return this.paramsString = parameters;
   }
 
@@ -60,7 +62,7 @@ export class AuctionsService {
   }
 
   public showAuction(id: any) {
-    console.log(this.url + 'auction/detail/' + id);
+    console.log(this.url + 'auction/' + id);
     return this.http.get(this.url + 'auction/' + id).map(this.extractData);
   }
 
@@ -109,7 +111,7 @@ export class AuctionsService {
     if (title !== '') {
       path = path + '?search=' + title;
     }
-    return this.http.get(path).map(this.extractData).debounce(() => Observable.timer(1000));
+    return this.http.get(path).map(this.extractData).debounce(() => Observable.timer(500));
   }
 
   public getTeams(title: string = '') {
@@ -118,7 +120,7 @@ export class AuctionsService {
       path = path + '?search=' + title;
     }
     console.log(path);
-    return this.http.get(path).map(this.extractData).debounce(() => Observable.timer(1000));
+    return this.http.get(path).map(this.extractData).debounce(() => Observable.timer(500));
   }
 
   public resetParams() {

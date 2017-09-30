@@ -1,8 +1,8 @@
-<div class="list-group">
-  <a href="#" class="list-group-item">
-    <h4 class="list-group-item-heading">List group item heading</h4>
-    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-      varius blandit.</p>
-  </a>
-
+<button class="btn btn-default" (click)="goBack()"><i class="glyphicon glyphicon-arrow-left"></i>К аукциону</button>
+<hr>
+<div class="panel panel-default">
+  <div class="panel-heading" [innerHTML]="data.title"></div>
+  <div class="panel-body">
+    {{data.description}}
+  </div>
 </div>

@@ -24,63 +24,57 @@ export class AuctionsComponent implements OnInit {
   public data = [];
   protected moment = moment;
   private searchTerms = new Subject<string>();
-  public players = [];
-  public teams = [];
+  public player = {
+    all: [],
+    id: 0,
+    title: '',
+    team: '',
+    position: '',
+    skill: 0,
+    age: 0,
+    cost: 0
+  };
+  public team = {
+    all: [],
+    id: 0,
+    title: ''
+  };
   ngOnInit() {
     this.getAuctions();
-    // this.searchPlayers();
-    this.searchTerms
-      .debounceTime(1000)
-      .switchMap(term => term
-        ? this.aucService.getTeams(term)
-        : Observable.of<any[]>([]))
-      .catch(error => {
-        return Observable.of<any[]>([]);
-      }).subscribe((data) => {
-      let arr = [];
-      if (data.length > 0) {
-        data.forEach((item) => {
-          arr.push({id: item.id, text: item.title});
-        });
-      }
-      this.teams = arr;
-      console.log(this.teams);
-    });
-    this.teamSearch(' ');
+    this.searchPlayers();
+    this.searchTeams();
+    this.aucService.onFetchAuctions().subscribe(() => this.getAuctions());
   }
 
   protected getAuctions() {
     this.aucService.getAuctions().subscribe((data) => {
       this.data = data;
       console.log(this.data);
-      if (this.data.length > 0) {
-        this.aucService.flash('Данные успешно загружены', 'success');
-      }
     });
   }
-  // protected searchPlayers() {
-  //   this.searchTerms
-  //     .debounceTime(1000)
-  //     .switchMap(term => term
-  //       ? this.aucService.getPlayers(term)
-  //       : Observable.of<any[]>([]))
-  //     .catch(error => {
-  //       return Observable.of<any[]>([]);
-  //     }).subscribe((data) => {
-  //     let arr = [];
-  //     if (data.length > 0) {
-  //       data.forEach((item) => {
-  //         arr.push({id: item.id, text: item.title});
-  //       });
-  //     }
-  //     this.players = arr;
-  //     console.log(this.players);
-  //   });
-  //   // this.playerSearch(' ');
-  // }
+  protected searchPlayers() {
+    this.searchTerms
+      .debounceTime(500)
+      .switchMap(term => term
+        ? this.aucService.getPlayers(term)
+        : Observable.of<any[]>([]))
+      .catch(error => {
+        return Observable.of<any[]>([]);
+      }).subscribe((data) => {
+      let arr = [];
+      if (data.length > 0) {
+        data.forEach((item) => {
+          arr.push({id: item.id, text: `<a class="select-items" href=https://sofifa.com/player/${item.id} target="_blank"><span class="glyphicon glyphicon-link"></span></a> ${item.title}`, position: item.position, skill: item.skill, age: item.age, team: item.team[0].title});
+        });
+      }
+      this.player.all = arr;
+      console.log(this.player.all);
+    });
+    this.search(' ');
+  }
   protected searchTeams() {
     this.searchTerms
-      .debounceTime(1000)
+      .debounceTime(500)
       .switchMap(term => term
         ? this.aucService.getTeams(term)
         : Observable.of<any[]>([]))
@@ -93,30 +87,96 @@ export class AuctionsComponent implements OnInit {
           arr.push({id: item.id, text: item.title});
         });
       }
-      this.teams = arr;
-      console.log(this.teams);
+      this.team.all = arr;
+      console.log(this.team.all);
     });
-    // this.playerSearch(' ');
+    this.search(' ');
   }
-  protected teamSearch(value: any = '') {
+  protected search(value: any = '') {
     this.searchTerms.next(value);
   }
   protected save(form: NgForm) {
+    form.value.auctions_option_id = 1;
+    form.value.title = this.player.title;
+    form.value.description = 'Из ' + this.player.team + ' в ' + this.team.title + ' за ' + this.player.cost + ' млн.';
+    form.value.player_id = this.player.id;
+    form.value.team_id = this.team.id;
+    form.value.initial_cost = this.player.cost;
+    form.value.user_id = 1111111111;
+    console.log(form.value);
     this.aucService.addAuction(form.value).subscribe((data) => {
         this.addModal.hide();
         this.respData = data;
         this.aucService.flash('Аукцион успешно создан!', 'success');
-        this.router.navigate(['/auction/' + this.respData.id]);
+        // this.router.navigate(['/auction/' + this.respData.id]);
       }, (error) => {
         this.respData = error;
         this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
       }
     );
+    this.aucService.fetchAuctions();
   }
 
   public openModal() {
     this.addModal.show();
   }
 
-  protected setPlayerItem(event) {}
+  protected setItem(type, event) {
+    if (type === 'player') {
+      for (let item of this.player.all) {
+        if (item.id === event.id) {
+          this.player.id = event.id;
+          this.player.title = event.text;
+          this.player.position = item.position;
+          this.player.skill = item.skill;
+          this.player.age = item.age;
+          this.player.team = item.team;
+          this.calculateCost();
+        }
+      }
+    } else {
+      this.team.id = event.id;
+      this.team.title = event.text;
+    }
+  }
+
+  protected calculateCost() {
+    let result = ((Math.pow(this.player.skill, 4)) / ( ((100 - this.player.skill) / this.player.skill) * (110 - this.player.skill) ));
+    if (this.player.position === 'CB') {
+      result *= 2;
+    }
+    if (this.player.position === 'RB' || this.player.position === 'LB') {
+      result *= 2.2;
+    }
+    if (this.player.position === 'RWB' || this.player.position === 'LWB') {
+      result *= 2.4;
+    }
+    if (this.player.position === 'CDM') {
+      result *= 2.5;
+    }
+    if (this.player.position === 'CM') {
+      result *= 2.7;
+    }
+    if (this.player.position === 'RM' || this.player.position === 'LM') {
+      result *= 2.9;
+    }
+    if (this.player.position === 'RW' || this.player.position === 'LW') {
+      result *= 3.2;
+    }
+    if (this.player.position === 'CAM') {
+      result *= 3.3;
+    }
+    if (this.player.position === 'ST' || this.player.position === 'CF' || this.player.position === 'LF' || this.player.position === 'RF') {
+      result *= 3.5;
+    }
+    result *= ((35 - this.player.age) * 0.1);
+    if (result > 120000000) {
+      result = 120000000;
+    }
+    if (result === 0 || result < 0) {
+      result = 1;
+    }
+
+    this.player.cost = Math.round(result / 1000000);
+  }
 }
