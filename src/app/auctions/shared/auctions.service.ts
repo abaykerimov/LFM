@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Headers, Http, RequestOptions, Response} from '@angular/http';
+import {Headers, Http, URLSearchParams, Response, Jsonp} from '@angular/http';
 
 import 'rxjs/add/operator/map';
 import {AuthHttp} from 'angular2-jwt';
@@ -7,7 +7,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import {Subject} from 'rxjs/Subject';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {env} from "../../../.env";
 
 @Injectable()
@@ -20,12 +20,58 @@ export class AuctionsService {
 
   private updateData = new Subject<boolean>();
 
+  public vk = {
+    app_id: 0,
+    user_id: 0,
+    auth_key: '',
+    app_secret: 'yrqoSBU4JX8ZXY2jsiHg'
+  };
 
-  constructor(private http: Http, public toastr: ToastsManager, private router: Router) {
+  public user = {
+    id: 0,
+    first_name: '',
+    last_name: ''
+  };
+  constructor(private http: Http, public toastr: ToastsManager, private route: ActivatedRoute, private jsonp: Jsonp) {
     this.url = env('apiUrl');
     this.resetParams();
+    this.getUserData();
   }
 
+  public getUserData() {
+    return this.route.queryParams.subscribe(
+      params => {
+        this.vk.app_id = params['api_id'];
+        this.vk.user_id = params['viewer_id'];
+        this.vk.auth_key = params['auth_key'];
+        this.getUser(this.vk);
+        console.log(this.vk);
+
+      });
+  }
+
+  public getUser(value: any) {
+    let vk_api = 'https://api.vk.com/method/users.get?user_ids=' + value.user_id + '&v=5.68';
+    let params = new URLSearchParams();
+    params.set('callback', 'JSONP_CALLBACK');
+    this.jsonp.get(vk_api, {search: params}).map(this.extractData).subscribe(data => {
+      this.user.id = data.response[0].id;
+      this.user.first_name = data.response[0].first_name;
+      this.user.last_name = data.response[0].last_name;
+      this.addUserToDB(this.user, value);
+    });
+  }
+
+  private addUserToDB(body, data) {
+    let item = JSON.parse(localStorage.getItem('curUser'));
+    if (item === null) {
+      localStorage.setItem('curUser', JSON.stringify(data));
+      const params = JSON.stringify(body);
+      return this.http.post(this.url + 'user', params, { headers: this.headers }).map(this.extractData).subscribe(data => {
+        console.log(data);
+      });
+    }
+  }
   public fetchData() {
     this.updateData.next(true);
   }
@@ -58,7 +104,6 @@ export class AuctionsService {
   }
 
   public getAuctions() {
-    console.log(this.url);
     return this.http.get(this.url + 'auction').map(this.extractData);
   }
 

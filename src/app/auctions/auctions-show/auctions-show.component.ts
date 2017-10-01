@@ -67,15 +67,18 @@ export class AuctionsShowComponent implements OnInit {
   protected save(form: NgForm) {
     form.value.auction_id = this.auction.id;
     form.value.team_id = this.team.id;
-    form.value.user_id = 1111111111;
+    form.value.user_id = this.aucService.user.id;
     console.log(form.value);
-    this.aucService.addOffer(form.value).subscribe((data) => {
-        this.aucService.flash('Ставка сделана!', 'success');
-      }, (error) => {
-        this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
-      }
-    );
-    this.aucService.fetchData();
+    if (this.alert.type !== 'cost-error') {
+      this.aucService.addOffer(form.value).subscribe((data) => {
+          this.aucService.flash('Ставка сделана!', 'success');
+          this.aucService.fetchData();
+          form.reset();
+        }, (error) => {
+          this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
+        }
+      );
+    }
   }
 
   protected searchTeams() {

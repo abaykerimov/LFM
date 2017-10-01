@@ -16,7 +16,6 @@ import {Observable} from 'rxjs/Observable';
 
 export class AuctionsComponent implements OnInit {
 
-  private respData;
   @ViewChild('addModal') public addModal: ModalDirective;
   constructor(protected aucService: AuctionsService, private router: Router, private vcr: ViewContainerRef) {
     this.aucService.toastr.setRootViewContainerRef( this.vcr);
@@ -102,19 +101,18 @@ export class AuctionsComponent implements OnInit {
     form.value.player_id = this.player.id;
     form.value.team_id = this.team.id;
     form.value.initial_cost = this.player.cost;
-    form.value.user_id = 1111111111;
+    form.value.user_id = this.aucService.user.id;
     console.log(form.value);
     this.aucService.addAuction(form.value).subscribe((data) => {
         this.addModal.hide();
-        this.respData = data;
         this.aucService.flash('Аукцион успешно создан!', 'success');
+        this.aucService.fetchData();
+        form.reset();
         // this.router.navigate(['/auction/' + this.respData.id]);
       }, (error) => {
-        this.respData = error;
         this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
       }
     );
-    this.aucService.fetchData();
   }
 
   public openModal() {
