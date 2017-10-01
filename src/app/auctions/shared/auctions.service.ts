@@ -18,19 +18,20 @@ export class AuctionsService {
   private url;
   private stateParams = {};
 
-  private updateAuctions = new Subject<boolean>();
+  private updateData = new Subject<boolean>();
+
 
   constructor(private http: Http, public toastr: ToastsManager, private router: Router) {
     this.url = env('apiUrl');
     this.resetParams();
   }
 
-  public fetchAuctions() {
-    this.updateAuctions.next(true);
+  public fetchData() {
+    this.updateData.next(true);
   }
 
-  public onFetchAuctions() {
-    return this.updateAuctions;
+  public onFetchData() {
+    return this.updateData;
   }
 
   public setParams(params: object = null) {
@@ -61,6 +62,9 @@ export class AuctionsService {
     return this.http.get(this.url + 'auction').map(this.extractData);
   }
 
+  public getOffersByAuction(id: any) {
+    return this.http.get(this.url + 'offer/' + id).map(this.extractData);
+  }
   public showAuction(id: any) {
     console.log(this.url + 'auction/' + id);
     return this.http.get(this.url + 'auction/' + id).map(this.extractData);
@@ -104,6 +108,11 @@ export class AuctionsService {
   public addAuction(body: any) {
     const params = JSON.stringify(body);
     return this.http.post(this.url + 'auction', params, { headers: this.headers }).map(this.extractData);
+  }
+
+  public addOffer(body: any) {
+    const params = JSON.stringify(body);
+    return this.http.post(this.url + 'offer', params, { headers: this.headers }).map(this.extractData);
   }
 
   public getPlayers(title: string = '') {

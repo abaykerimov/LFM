@@ -43,7 +43,7 @@ export class AuctionsComponent implements OnInit {
     this.getAuctions();
     this.searchPlayers();
     this.searchTeams();
-    this.aucService.onFetchAuctions().subscribe(() => this.getAuctions());
+    this.aucService.onFetchData().subscribe(() => this.getAuctions());
   }
 
   protected getAuctions() {
@@ -92,10 +92,10 @@ export class AuctionsComponent implements OnInit {
     });
     this.search(' ');
   }
-  protected search(value: any = '') {
+  public search(value: any = '') {
     this.searchTerms.next(value);
   }
-  protected save(form: NgForm) {
+  public save(form: NgForm) {
     form.value.auctions_option_id = 1;
     form.value.title = this.player.title;
     form.value.description = 'Из ' + this.player.team + ' в ' + this.team.title + ' за ' + this.player.cost + ' млн.';
@@ -114,14 +114,14 @@ export class AuctionsComponent implements OnInit {
         this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
       }
     );
-    this.aucService.fetchAuctions();
+    this.aucService.fetchData();
   }
 
   public openModal() {
     this.addModal.show();
   }
 
-  protected setItem(type, event) {
+  public setItem(type, event) {
     if (type === 'player') {
       for (let item of this.player.all) {
         if (item.id === event.id) {

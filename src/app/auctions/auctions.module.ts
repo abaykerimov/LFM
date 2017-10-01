@@ -11,7 +11,7 @@ import {AlertModule, ModalModule} from 'ngx-bootstrap';
 import {SelectModule} from 'ng2-select';
 import {ToastModule} from 'ng2-toastr';
 import {CommonModule} from '@angular/common';
-import {AuctionsPlayerCostCalculateComponent} from "./auctions-player-cost-calculate/auctions-player-cost-calculate";
+import { SpinnerModule } from 'angular2-spinner/src';
 
 @NgModule({
   imports: [
@@ -24,12 +24,12 @@ import {AuctionsPlayerCostCalculateComponent} from "./auctions-player-cost-calcu
     ModalModule.forRoot(),
     AlertModule.forRoot(),
     ToastModule.forRoot(),
-    SelectModule
+    SelectModule,
+    SpinnerModule
   ],
   declarations: [
     AuctionsShowComponent,
     AuctionsComponent,
-    // AuctionsPlayerCostCalculateComponent
   ],
   exports: [
     CommonModule,

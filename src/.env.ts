@@ -1,7 +1,7 @@
 export const env = (key) => {
 
   let data = {
-    apiUrl: 'http://kerimov.kz/api/',
+    apiUrl: 'https://kerimov.kz/api/',
   };
 
   return data[key] || null;

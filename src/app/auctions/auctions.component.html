@@ -73,3 +73,7 @@
     </div>
   </div>
 </div>
+
+<div class="spinner-overlay" *ngIf="data.length == 0">
+  <spinner [size]="50" [tickness]="1" style="position: fixed !important;" [color]="'#ffffff'" [opacity]="'0.1'"></spinner>
+</div>
