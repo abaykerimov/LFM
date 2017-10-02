@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
-import {Router} from "@angular/router";
-import {AuctionsService} from "./auctions/shared/auctions.service";
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
 import {Md5} from "ts-md5/dist/md5";
+import {UserService} from "./user/user.service";
 
 @Component({
   selector: 'app',
@@ -9,11 +9,13 @@ import {Md5} from "ts-md5/dist/md5";
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent {
-  private token;
-  constructor(protected aucService: AuctionsService, private router: Router) {
-    // this.token = Md5.hashStr(aucService.vk.app_id + '_' + aucService.vk.user_id + '_' + aucService.vk.app_secret);
-    // console.log(this.token);
-    // console.log(aucService.vk);
+export class AppComponent implements OnInit{
+  public error;
+  constructor(private route: ActivatedRoute){}
+  ngOnInit() {
+    return this.route.queryParams.subscribe(
+      params => {
+        this.error = params['error'];
+      });
   }
 }

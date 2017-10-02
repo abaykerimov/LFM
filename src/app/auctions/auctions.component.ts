@@ -8,6 +8,7 @@ import {ModalDirective} from 'ngx-bootstrap';
 import * as moment from 'moment';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
+import {UserService} from "../user/user.service";
 
 @Component({
   selector: 'auctions',
@@ -17,7 +18,7 @@ import {Observable} from 'rxjs/Observable';
 export class AuctionsComponent implements OnInit {
 
   @ViewChild('addModal') public addModal: ModalDirective;
-  constructor(protected aucService: AuctionsService, private router: Router, private vcr: ViewContainerRef) {
+  constructor(protected aucService: AuctionsService, private vcr: ViewContainerRef, protected uService: UserService) {
     this.aucService.toastr.setRootViewContainerRef( this.vcr);
   }
   public data = [];
@@ -101,7 +102,7 @@ export class AuctionsComponent implements OnInit {
     form.value.player_id = this.player.id;
     form.value.team_id = this.team.id;
     form.value.initial_cost = this.player.cost;
-    form.value.user_id = this.aucService.user.id;
+    form.value.user_id = this.uService.user.id;
     console.log(form.value);
     this.aucService.addAuction(form.value).subscribe((data) => {
         this.addModal.hide();

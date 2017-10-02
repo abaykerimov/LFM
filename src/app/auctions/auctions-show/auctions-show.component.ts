@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {Location} from '@angular/common';
+import {UserService} from "../../user/user.service";
 
 @Component({
   selector: 'auctions-show',
@@ -29,7 +30,7 @@ export class AuctionsShowComponent implements OnInit {
   };
   private searchTerms = new Subject<string>();
 
-  constructor(private aucService: AuctionsService, private route: ActivatedRoute, private vcr: ViewContainerRef, private location: Location) {
+  constructor(private aucService: AuctionsService, private route: ActivatedRoute, private vcr: ViewContainerRef, private location: Location, protected uService: UserService) {
     this.aucService.toastr.setRootViewContainerRef(this.vcr);
   }
 
@@ -38,6 +39,7 @@ export class AuctionsShowComponent implements OnInit {
     this.getOffers();
     this.searchTeams();
     this.aucService.onFetchData().subscribe(() => this.getOffers());
+    console.log(this.uService.vk);
   }
 
   protected showAuction() {
@@ -67,7 +69,7 @@ export class AuctionsShowComponent implements OnInit {
   protected save(form: NgForm) {
     form.value.auction_id = this.auction.id;
     form.value.team_id = this.team.id;
-    form.value.user_id = this.aucService.user.id;
+    form.value.user_id = this.uService.user.id;
     console.log(form.value);
     if (this.alert.type !== 'cost-error') {
       this.aucService.addOffer(form.value).subscribe((data) => {
