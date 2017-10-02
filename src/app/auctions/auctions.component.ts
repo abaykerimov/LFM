@@ -18,8 +18,10 @@ import {UserService} from "../user/user.service";
 export class AuctionsComponent implements OnInit {
 
   @ViewChild('addModal') public addModal: ModalDirective;
-  constructor(protected aucService: AuctionsService, private vcr: ViewContainerRef, protected uService: UserService) {
+  private user;
+  constructor(protected aucService: AuctionsService, private vcr: ViewContainerRef, private uService: UserService) {
     this.aucService.toastr.setRootViewContainerRef( this.vcr);
+    this.user = JSON.parse(sessionStorage.getItem('curUser'));
   }
   public data = [];
   protected moment = moment;
@@ -102,7 +104,7 @@ export class AuctionsComponent implements OnInit {
     form.value.player_id = this.player.id;
     form.value.team_id = this.team.id;
     form.value.initial_cost = this.player.cost;
-    form.value.user_id = this.uService.user.id;
+    form.value.user_id = this.user['user_id'];
     console.log(form.value);
     this.aucService.addAuction(form.value).subscribe((data) => {
         this.addModal.hide();

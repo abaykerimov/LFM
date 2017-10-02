@@ -11,25 +11,22 @@ import {Md5} from "ts-md5/dist/md5";
 
 @Injectable()
 export class UserService {
+  public headers: Headers = new Headers({ 'Content-Type': 'application/json;charset=utf-8' });
   private url;
 
   public vk = {
     app_id: 0,
     user_id: 0,
     auth_key: '',
-    app_secret: 'yrqoSBU4JX8ZXY2jsiHg' /* ПОМЕНЯТЬ ПОТОМ! */
+    app_secret: 'oDzC4j9aIJlA0O1s3yUp' /* ПОМЕНЯТЬ ПОТОМ! */
   };
 
-  public user = {
-    id: 0,
-    first_name: '',
-    last_name: ''
-  };
+  public user;
   private token;
 
   constructor(private http: Http, private route: ActivatedRoute, private jsonp: Jsonp, private router: Router) {
     this.url = env('apiUrl');
-    if (this.vk.user_id === 0) {
+    if (sessionStorage.getItem('curUser') === null || Object.keys(JSON.parse(sessionStorage.getItem('curUser'))).length < 3) {
       this.getUserData();
     }
   }
@@ -40,33 +37,38 @@ export class UserService {
         this.vk.app_id = params['api_id'];
         this.vk.user_id = params['viewer_id'];
         this.vk.auth_key = params['auth_key'];
-        this.getUser(this.vk);
-        console.log(this.vk);
+        this.getUser(this.vk).subscribe(data => {
+          if (Object.keys(data).length === 0) {
+            this.getVKUser(this.vk).subscribe(data => {
+              this.user = data.response[0];
+              if (Object.keys(this.user).length !== 0) {
+                this.addUserToDB(this.user);
+              }
+            });
+          } else {
+            this.user = data;
+          }
+        });
+        sessionStorage.setItem('curUser', JSON.stringify(this.vk));
         // this.checkUser(this.vk);
       });
   }
 
   public getUser(value: any) {
+    let api = this.url + 'user/' + value.user_id;
+    return this.http.get(api).map(this.extractData);
+  }
+
+  public getVKUser(value: any) {
     let vk_api = 'https://api.vk.com/method/users.get?user_ids=' + value.user_id + '&v=5.68';
     let params = new URLSearchParams();
     params.set('callback', 'JSONP_CALLBACK');
-    this.jsonp.get(vk_api, {search: params}).map(this.extractData).subscribe(data => {
-      this.user.id = data.response[0].id;
-      this.user.first_name = data.response[0].first_name;
-      this.user.last_name = data.response[0].last_name;
-      this.addUserToDB(this.user, value);
-    });
+    return this.jsonp.get(vk_api, {search: params}).map(this.extractData);
   }
 
-  private addUserToDB(body, data) {
-    let item = JSON.parse(localStorage.getItem('curUser'));
-    if (item === null) {
-      localStorage.setItem('curUser', JSON.stringify(data));
-      const params = JSON.stringify(body);
-      return this.http.post(this.url + 'user', params).map(this.extractData).subscribe(data => {
-        console.log(data);
-      });
-    }
+  private addUserToDB(body: any) {
+    const params = JSON.stringify(body);
+    this.http.post(this.url + 'user', params, { headers: this.headers }).map(this.extractData).subscribe();
   }
 
   private checkUser(value: any) {

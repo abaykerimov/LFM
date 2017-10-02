@@ -29,9 +29,10 @@ export class AuctionsShowComponent implements OnInit {
     title: ''
   };
   private searchTerms = new Subject<string>();
-
-  constructor(private aucService: AuctionsService, private route: ActivatedRoute, private vcr: ViewContainerRef, private location: Location, protected uService: UserService) {
+  private user;
+  constructor(private aucService: AuctionsService, private route: ActivatedRoute, private vcr: ViewContainerRef, private location: Location, private uService: UserService) {
     this.aucService.toastr.setRootViewContainerRef(this.vcr);
+    this.user = JSON.parse(sessionStorage.getItem('curUser'));
   }
 
   ngOnInit() {
@@ -39,7 +40,6 @@ export class AuctionsShowComponent implements OnInit {
     this.getOffers();
     this.searchTeams();
     this.aucService.onFetchData().subscribe(() => this.getOffers());
-    console.log(this.uService.vk);
   }
 
   protected showAuction() {
@@ -69,13 +69,13 @@ export class AuctionsShowComponent implements OnInit {
   protected save(form: NgForm) {
     form.value.auction_id = this.auction.id;
     form.value.team_id = this.team.id;
-    form.value.user_id = this.uService.user.id;
+    form.value.user_id = this.user['user_id'];
     console.log(form.value);
-    if (this.alert.type !== 'cost-error') {
+    if (this.alert.type === 'success') {
       this.aucService.addOffer(form.value).subscribe((data) => {
           this.aucService.flash('Ставка сделана!', 'success');
           this.aucService.fetchData();
-          form.reset();
+          // form.reset();
         }, (error) => {
           this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
         }
@@ -118,20 +118,26 @@ export class AuctionsShowComponent implements OnInit {
     text: ''
   };
 
-  protected checkCost(event) {
-    if (event < this.offers[0].cost) {
-      this.alert.type = 'cost-error';
-      this.alert.text = 'Стоимость не должна быть меньше предыдущей!';
+  protected checkCost(event, value) {
+    let temp;
+    if (value.length === 0) {
+      temp = this.auction.all['initial_cost'];
     } else {
-      this.alert.text = '';
+      temp = this.offers[0].cost;
+    }
+    if (event < temp) {
+      this.alert.type = 'cost-error';
+      this.aucService.flash('Стоимость не должна быть меньше предыдущей!', 'error');
+    } else {
+      this.alert.type = 'success';
     }
   }
 
   private finishTime;
   protected timer() {
-    this.finishTime = moment(this.auction.all['created_at']).add(10, 'm');
+    this.finishTime = moment(this.auction.all['created_at']).add(20, 'm');
     if (this.offers.length > 0) {
-      this.finishTime = moment(this.offers[0].created_at).add(10, 'm');
+      this.finishTime = moment(this.offers[0].created_at).add(20, 'm');
     }
 
     if (moment() > this.finishTime) {

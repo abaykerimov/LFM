@@ -12,11 +12,10 @@
     <p *ngIf="alert.type === 'time-is-over'" class="text-danger" [innerHTML]="alert.text"></p>
     <div class="col-md-6" *ngIf="alert.type !== 'time-is-over'">
       <form #form="ngForm" (ngSubmit)="save(form)" class="form-horizontal">
-        <span class="text-danger" [innerHTML]="alert.text"></span>
         <div class="form-group">
           <label class="col-md-2 control-label" for="player-cost">Цена</label>
           <div class="col-md-10">
-            <input type="number" id="player-cost" class="form-control" name="cost" ngModel required (ngModelChange)="checkCost($event)" placeholder="Введите сумму, млн.">
+            <input type="number" id="player-cost" class="form-control" name="cost" ngModel required (ngModelChange)="checkCost($event, offers)" placeholder="Введите сумму, млн.">
           </div>
         </div>
 
