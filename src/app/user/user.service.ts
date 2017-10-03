@@ -26,17 +26,21 @@ export class UserService {
 
   constructor(private http: Http, private route: ActivatedRoute, private jsonp: Jsonp, private router: Router) {
     this.url = env('apiUrl');
-    if (sessionStorage.getItem('curUser') === null || Object.keys(JSON.parse(sessionStorage.getItem('curUser'))).length < 3) {
-      this.getUserData();
-    }
+    this.getUserData();
   }
 
   public getUserData() {
     this.route.queryParams.subscribe(
       params => {
-        this.vk.app_id = params['api_id'];
-        this.vk.user_id = params['viewer_id'];
-        this.vk.auth_key = params['auth_key'];
+        if (Object.keys(params).length !== 0) {
+          this.vk.app_id = params['api_id'];
+          this.vk.user_id = params['viewer_id'];
+          this.vk.auth_key = params['auth_key'];
+          sessionStorage.setItem('curUser', JSON.stringify(this.vk));
+        } else {
+          this.vk = JSON.parse(sessionStorage.getItem('curUser'));
+        }
+
         this.getUser(this.vk).subscribe(data => {
           if (Object.keys(data).length === 0) {
             this.getVKUser(this.vk).subscribe(data => {
@@ -49,7 +53,6 @@ export class UserService {
             this.user = data;
           }
         });
-        sessionStorage.setItem('curUser', JSON.stringify(this.vk));
         // this.checkUser(this.vk);
       });
   }

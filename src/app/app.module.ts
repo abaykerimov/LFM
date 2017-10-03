@@ -18,7 +18,7 @@ import {UserService} from "./user/user.service";
     HttpModule,
     JsonpModule,
     AuctionsModule,
-    RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
   ],
   declarations: [
     AppComponent,

@@ -1,6 +1,7 @@
 <button class="btn btn-success" (click)="openModal()">Создать аукцион</button>
 <hr>
-<div class="list-group" *ngFor="let auction of data">
+
+<div class="list-group" *ngFor="let auction of data | paginate: { itemsPerPage: 7, currentPage: p }">
   <a [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
     <p class="list-group-item-heading" [innerHTML]="auction.title"></p>
     <p class="list-group-item-text description"><i class="glyphicon glyphicon-info-sign"></i>{{auction.description}}</p>
@@ -9,6 +10,11 @@
     </div>
   </a>
 </div>
+<pagination-controls
+  (pageChange)="p = $event"
+  previousLabel=""
+  nextLabel=""
+  directionLinks="false"></pagination-controls>
 
 <div bsModal #addModal="bs-modal" id="addModal" class="modal fade" tabindex="-1" role="dialog"
      aria-labelledby="addAuctionModalLabel" aria-hidden="true">

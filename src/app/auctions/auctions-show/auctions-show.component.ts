@@ -80,6 +80,8 @@ export class AuctionsShowComponent implements OnInit {
           this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
         }
       );
+    } else {
+      this.aucService.flash('Стоимость не должна быть меньше предыдущей!', 'error');
     }
   }
 
@@ -127,7 +129,6 @@ export class AuctionsShowComponent implements OnInit {
     }
     if (event < temp) {
       this.alert.type = 'cost-error';
-      this.aucService.flash('Стоимость не должна быть меньше предыдущей!', 'error');
     } else {
       this.alert.type = 'success';
     }

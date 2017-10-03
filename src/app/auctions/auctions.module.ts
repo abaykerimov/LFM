@@ -12,6 +12,7 @@ import {SelectModule} from 'ng2-select';
 import {ToastModule} from 'ng2-toastr';
 import {CommonModule} from '@angular/common';
 import { SpinnerModule } from 'angular2-spinner/src';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { SpinnerModule } from 'angular2-spinner/src';
     AlertModule.forRoot(),
     ToastModule.forRoot(),
     SelectModule,
-    SpinnerModule
+    SpinnerModule,
+    NgxPaginationModule
   ],
   declarations: [
     AuctionsShowComponent,
