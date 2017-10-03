@@ -145,6 +145,17 @@ export class AuctionsShowComponent implements OnInit {
     }
   }
 
+  protected updateAuction() {
+    let body = {
+      final_cost: this.auction.initial_cost
+    };
+    if (this.offers.length > 0) {
+      body.final_cost = this.offers[0].cost;
+    }
+    this.aucService.updateAuction(body, this.auction_id).subscribe(data => {
+
+    });
+  }
   goBack() {
     this.location.back();
   }

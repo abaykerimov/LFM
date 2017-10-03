@@ -8,7 +8,7 @@
         <p><i class="glyphicon glyphicon-user"></i> {{auction.player['title']}}</p>
         <p><i class="glyphicon glyphicon glyphicon-knight"></i>{{auction.player['position']}}</p>
         <p><i class="glyphicon glyphicon glyphicon-signal"></i>{{auction.player['skill']}}</p>
-        <p><i class="glyphicon glyphicon glyphicon-flash"></i>{{auction.player['date_of_birth']}}</p>
+        <p><i class="glyphicon glyphicon glyphicon-flash"></i>{{moment(auction.player['date_of_birth']).format('DD.MM.YYYY')}}</p>
       </div>
     </div>
     <div class="panel-body">

@@ -67,6 +67,10 @@ export class AuctionsService {
     return this.http.get(this.url + 'auction/' + id).map(this.extractData);
   }
 
+  public updateAuction(body: any, id) {
+    const params = JSON.stringify(body);
+    return this.http.put(this.url + 'auction/' + id, params, { headers: this.headers }).map(this.extractData);
+  }
   // public uploadFile(event) {
   //   let fileList: FileList = event.target.files;
   //   console.log(fileList);

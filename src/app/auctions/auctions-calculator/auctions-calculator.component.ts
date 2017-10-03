@@ -66,14 +66,16 @@ export class AuctionsCalculatorComponent implements OnInit {
       form.value.initial_cost = this.player.cost;
       form.value.user_id = this.user['user_id'];
       this.onSubmit.emit(form.value);
+      form.reset();
     } else {
-      console.log(form.value);
       this.calculateCost(form.value);
     }
   }
 
-  hide(){
+  hide(form: NgForm){
     this.onClose.emit();
+    form.reset();
+    this.player.id = 0;
   }
   protected searchPlayers() {
     this.searchTerms

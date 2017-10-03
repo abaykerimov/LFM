@@ -1,6 +1,6 @@
 <button class="btn btn-success" (click)="openModal()">Создать аукцион</button>
 <hr>
-
+<button class="btn btn-default btn-sm"><i class="glyphicon glyphicon-refresh" style="margin-left: 5px;" (click)="getAuctions()"></i></button>
 <div class="list-group" *ngFor="let auction of data | paginate: { itemsPerPage: 7, currentPage: p }">
   <a [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
     <img class="img-responsive avatar" src="{{auction.player['avatar']}}">
