@@ -1,0 +1,110 @@
+<button *ngIf="param === false" class="btn btn-default" (click)="goBack()"><i class="glyphicon glyphicon-arrow-left"></i>Назад</button>
+
+<form #form="ngForm" (ngSubmit)="submit(form)" class="form-horizontal">
+  <fieldset *ngIf="param === true">
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="player-title">Игрок</label>
+      <div class="col-md-10">
+        <ng-select class="players" id="player-title" name="player_id"
+                   [items]="player.all"
+                   (selected)="setItem('player', $event)"
+                   (typed)="search($event)"
+                   placeholder="Искать игрока..." ngModel required></ng-select>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="player.id !== 0">
+      <div class="infos">
+        <label class="col-md-2 control-label title">Клуб</label>
+        <p class="col-md-10 info" [innerHTML]="player.team"></p>
+      </div>
+      <div class="infos">
+        <label class="col-md-2 control-label title">Скилл</label>
+        <p class="col-md-10 info" [innerHTML]="player.skill"></p>
+      </div>
+      <div class="infos">
+        <label class="col-md-2 control-label title">Позиция</label>
+        <p class="col-md-10 info" [innerHTML]="player.position"></p>
+      </div>
+      <div class="infos">
+        <label class="col-md-2 control-label title">Возраст</label>
+        <p class="col-md-10 info" [innerHTML]="player.age"></p>
+      </div>
+      <div class="infos">
+        <label class="col-md-2 control-label title">Стоимость</label>
+        <p class="col-md-10 info" [innerHTML]="player.cost + ' млн.'"></p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="team-title">Ваш клуб</label>
+      <div class="col-md-10">
+        <ng-select class="teams" id="team-title" name="team_id"
+                   [items]="team.all"
+                   (selected)="setItem('team', $event)"
+                   (typed)="search($event)"
+                   placeholder="Искать клуб..." ngModel required></ng-select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" [disabled]="!form.valid">Создать аукцион</button>
+      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="hide()">Закрыть</button>
+    </div>
+  </fieldset>
+
+  <fieldset class="calculator" *ngIf="param === false">
+    <div class="form-group">
+      <label class="col-lg-4 control-label">Стоимость: </label>
+
+      <div class="col-lg-2 value cost">
+        <span id="cost" [innerHTML]="player.cost + ' млн.'"></span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="position" class="col-lg-4 control-label">Выберите позицию</label>
+
+      <div class="col-lg-2 value">
+        <select class="form-control" id="position" name="position" required [ngModel]="player.position">
+          <option value="GK">GK</option>
+          <option value="CB">ЦЗ</option>
+          <option value="RB">ПЗ,ЛЗ</option>
+          <option value="RWB">ПФЗ,ЛФЗ</option>
+          <option value="CDM">ЦОП</option>
+          <option value="CM">ЦП</option>
+          <option value="RM">ПП,ЛП</option>
+          <option value="CAM">ЦАП</option>
+          <option value="RW">ПФА,ЛФА</option>
+          <option value="ST">ФРВ,ЦФД</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="skill" class="col-lg-4 control-label">Введите скилл</label>
+
+      <div class="col-lg-2 value">
+        <input class="form-control" name="skill" type="number" min="1" id="skill" [(ngModel)]="player.skill">
+      </div>
+      <div class="col-lg-2 options">
+        <input class="btn btn-default" (click)="plus('skill')" type="button" value="+"/>
+        <input class="btn btn-default" (click)="minus('skill')" type="button" value="-"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="age" class="col-lg-4 control-label">Введите возраст</label>
+
+      <div class="col-lg-2 value">
+        <input class="form-control" name="age" type="number" min="1" id="age" [(ngModel)]="player.age">
+      </div>
+      <div class="col-lg-2 options">
+        <input class="btn btn-default" (click)="plus('age')" type="button" value="+"/>
+        <input class="btn btn-default" (click)="minus('age')" type="button" value="-"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-2 col-lg-offset-4 submit">
+        <button type="submit" class="btn btn-success" style="width: 100%;">Посчитать</button>
+
+      </div>
+    </div>
+  </fieldset>
+</form>

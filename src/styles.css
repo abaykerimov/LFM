@@ -15,8 +15,17 @@ auctions .form-group .info {
   margin-bottom: 0;
 }
 
-auctions ng-select span {
+auctions-calculator ng-select span {
   margin-right: 5px;
+}
+
+auctions-calculator ng-select .dropdown-item a {
+  text-decoration: none;
+}
+
+auctions-calculator ng-select .dropdown-item a:hover {
+  text-decoration: none;
+  color: #ffffff;
 }
 
 auctions .players-list p {
@@ -26,6 +35,38 @@ auctions .players-list p {
 auctions .players-list p.description {
   font-size: 12px;
 }
+
+.avatar {
+  width: 10%;
+  display: inline-block;
+  margin-top: -45px;
+}
+.auction-info {
+  width: 89%;
+  display: inline-block;
+}
+@media (max-width: 764px) {
+  .avatar {
+    width: 69px;
+    margin-top: -60px;
+  }
+  .auction-info {
+    width: 89% !important;
+  }
+}
+
+@media (max-width: 738px) {
+  .auction-info {
+    width: 70% !important;
+  }
+}
+
+@media (max-width: 342px) {
+  .auction-info {
+    width: 60% !important;
+  }
+}
+
 @media (max-width: 992px) {
   auctions .form-group .info {
     width: 60%;
@@ -106,4 +147,35 @@ pagination-controls .ngx-pagination > li > a, .pagination > li > span {
   background-color: #ffffff;
   border: 1px solid #dddddd;
   margin-left: -1px;
+}
+
+
+.calculator .col-lg-2 {
+   display: inline-block;
+ }
+.calculator .options {
+  margin-left: -25px;
+  width: 20% !important;
+}
+.calculator .control-label {
+  width: 33.33333333%;
+  text-align: right;
+}
+
+.calculator .value {
+  width: 40%;
+}
+.calculator .submit {
+  margin-left: 34%;
+  width: 40%;
+}
+@media screen and (max-width: 541px) {
+  .calculator .options {
+    width: 30% !important;
+  }
+}
+
+.calculator .cost {
+  margin-top: 7px;
+  font-size: 16px;
 }

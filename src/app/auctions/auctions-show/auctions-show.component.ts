@@ -18,10 +18,8 @@ import {UserService} from "../../user/user.service";
 export class AuctionsShowComponent implements OnInit {
   protected moment = moment;
   private sub: any;
-  public auction = {
-    all: [],
-    id: 0
-  };
+  public auction;
+  private auction_id;
   public offers = [];
   public team = {
     all: [],
@@ -45,19 +43,19 @@ export class AuctionsShowComponent implements OnInit {
   protected showAuction() {
     this.sub = this.route.params.subscribe(
       params => {
-        this.auction.id = params['id'];
-        this.aucService.showAuction(this.auction.id).subscribe(
+        this.auction_id = params['id'];
+        this.aucService.showAuction(this.auction_id).subscribe(
           (data) => {
-            this.auction.all = data;
-            console.log(this.auction.all);
+            this.auction = data;
+            console.log(this.auction);
           });
       }
     );
   }
 
   protected getOffers() {
-    if (this.auction.id !== 0) {
-      this.aucService.getOffersByAuction(this.auction.id).subscribe(
+    if (this.auction_id !== 0) {
+      this.aucService.getOffersByAuction(this.auction_id).subscribe(
         (data) => {
           this.offers = data;
           console.log(this.offers);
@@ -67,7 +65,7 @@ export class AuctionsShowComponent implements OnInit {
   }
 
   protected save(form: NgForm) {
-    form.value.auction_id = this.auction.id;
+    form.value.auction_id = this.auction_id;
     form.value.team_id = this.team.id;
     form.value.user_id = this.user['user_id'];
     console.log(form.value);
@@ -123,7 +121,7 @@ export class AuctionsShowComponent implements OnInit {
   protected checkCost(event, value) {
     let temp;
     if (value.length === 0) {
-      temp = this.auction.all['initial_cost'];
+      temp = this.auction['initial_cost'];
     } else {
       temp = this.offers[0].cost;
     }
@@ -136,7 +134,7 @@ export class AuctionsShowComponent implements OnInit {
 
   private finishTime;
   protected timer() {
-    this.finishTime = moment(this.auction.all['created_at']).add(20, 'm');
+    this.finishTime = moment(this.auction['created_at']).add(20, 'm');
     if (this.offers.length > 0) {
       this.finishTime = moment(this.offers[0].created_at).add(20, 'm');
     }

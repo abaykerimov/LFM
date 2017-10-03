@@ -32,11 +32,15 @@ export class UserService {
   public getUserData() {
     this.route.queryParams.subscribe(
       params => {
-        if (Object.keys(params).length !== 0) {
-          this.vk.app_id = params['api_id'];
-          this.vk.user_id = params['viewer_id'];
-          this.vk.auth_key = params['auth_key'];
-          sessionStorage.setItem('curUser', JSON.stringify(this.vk));
+        if (!params['type']) {
+          if (Object.keys(params).length !== 0) {
+            this.vk.app_id = params['api_id'];
+            this.vk.user_id = params['viewer_id'];
+            this.vk.auth_key = params['auth_key'];
+            sessionStorage.setItem('curUser', JSON.stringify(this.vk));
+          } else {
+            this.vk = JSON.parse(sessionStorage.getItem('curUser'));
+          }
         } else {
           this.vk = JSON.parse(sessionStorage.getItem('curUser'));
         }

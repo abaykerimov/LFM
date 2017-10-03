@@ -26,6 +26,7 @@
     "angular2-spinner": "^1.0.10",
     "core-js": "^2.5.1",
     "file-loader": "^1.1.4",
+    "firebase": "^4.4.0",
     "md5-typescript": "^1.0.0",
     "moment": "^2.18.1",
     "ng2-select": "^1.2.0",

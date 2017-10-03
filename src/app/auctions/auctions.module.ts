@@ -13,6 +13,7 @@ import {ToastModule} from 'ng2-toastr';
 import {CommonModule} from '@angular/common';
 import { SpinnerModule } from 'angular2-spinner/src';
 import {NgxPaginationModule} from 'ngx-pagination';
+import {AuctionsCalculatorComponent} from "./auctions-calculator/auctions-calculator.component";
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import {NgxPaginationModule} from 'ngx-pagination';
   declarations: [
     AuctionsShowComponent,
     AuctionsComponent,
+    AuctionsCalculatorComponent
   ],
   exports: [
     CommonModule,
