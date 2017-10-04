@@ -46,6 +46,8 @@
 
 
   <hr>
+  <button class="btn btn-default btn-sm" style="margin-bottom: 5px;"><i class="glyphicon glyphicon-refresh" style="margin-left: 5px;" (click)="getOffers()"></i></button>
+
   <blockquote *ngFor="let offer of offers">
     <p>{{offer.team.title + ', ' + offer.cost + ' млн.' }} <span style="float: right; font-size: 12px;" [innerHTML]="moment(offer.created_at, 'YYYY-MM-DD HH:mm:ss').format('HH:mm DD.MM.YYYY')"></span></p>
     <small><a href="https://vk.com/id{{offer.user_id}}" target="_blank">{{offer.user.first_name + ' ' + offer.user.last_name}}</a> </small>

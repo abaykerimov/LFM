@@ -14,6 +14,9 @@ import {CommonModule} from '@angular/common';
 import { SpinnerModule } from 'angular2-spinner/src';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {AuctionsCalculatorComponent} from "./auctions-calculator/auctions-calculator.component";
+import {AuctionsAssignComponent} from "./auctions-assign/auctions-assign.component";
+import { NKDatetimeModule } from 'ng2-datetime/ng2-datetime';
+import {DateTimePickerDirective} from "ng2-eonasdan-datetimepicker/dist/datetimepicker.directive";
 
 @NgModule({
   imports: [
@@ -28,12 +31,15 @@ import {AuctionsCalculatorComponent} from "./auctions-calculator/auctions-calcul
     ToastModule.forRoot(),
     SelectModule,
     SpinnerModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NKDatetimeModule
   ],
   declarations: [
     AuctionsShowComponent,
     AuctionsComponent,
-    AuctionsCalculatorComponent
+    AuctionsCalculatorComponent,
+    AuctionsAssignComponent,
+    // DateTimePickerDirective
   ],
   exports: [
     CommonModule,

@@ -67,6 +67,7 @@ export class AuctionsCalculatorComponent implements OnInit {
       form.value.user_id = this.user['user_id'];
       this.onSubmit.emit(form.value);
       form.reset();
+      this.player.id = 0;
     } else {
       this.calculateCost(form.value);
     }
@@ -89,7 +90,7 @@ export class AuctionsCalculatorComponent implements OnInit {
       let arr = [];
       if (data.length > 0) {
         data.forEach((item) => {
-          arr.push({id: item.id, text: `<a class="select-items" href=https://sofifa.com/player/${item.id} target="_blank">${item.title}</a>`, position: item.position, skill: item.skill, age: item.age, team: item.team[0].title});
+          arr.push({id: item.id, text: `<a class="select-items" href=https://sofifa.com/player/${item.id} target="_blank">${item.title}</a>`, position: item.position, skill: item.skill, date_of_birth: item.date_of_birth, team: item.team[0].title});
         });
       }
       this.player.all = arr;
@@ -128,7 +129,7 @@ export class AuctionsCalculatorComponent implements OnInit {
           this.player.title = event.text;
           this.player.position = item.position;
           this.player.skill = item.skill;
-          this.player.age = item.age;
+          this.player.age = moment(this.aucService.current).diff(moment(item.date_of_birth), 'years');
           this.player.team = item.team;
           this.calculateCost(this.player);
         }

@@ -1,0 +1,13 @@
+<form #form="ngForm" (ngSubmit)="save(form)" class="form-horizontal">
+  <fieldset>
+    <datetime [timepicker]="{ showMeridian: false, minuteStep: 1, placeholder: 'Время аукциона'}" [datepicker]="datepickerOpts" name="started_at" [(ngModel)]="date"></datetime>
+    <button class="btn btn-default"><i class="glyphicon glyphicon-check" style="margin-right: 0;"></i></button>
+
+    <!--<div class="form-group">-->
+      <!--<div class="col-lg-2 col-lg-offset-4 submit">-->
+        <!--<button type="submit" class="btn btn-success" style="width: 100%;">Посчитать</button>-->
+
+      <!--</div>-->
+    <!--</div>-->
+  </fieldset>
+</form>

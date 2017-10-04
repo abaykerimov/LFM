@@ -1,24 +1,32 @@
-<button class="btn btn-success" (click)="openModal()">Создать аукцион</button>
-<hr>
-<button class="btn btn-default btn-sm"><i class="glyphicon glyphicon-refresh" style="margin-left: 5px;" (click)="getAuctions()"></i></button>
-<div class="list-group" *ngFor="let auction of data | paginate: { itemsPerPage: 7, currentPage: p }">
-  <a [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
-    <img class="img-responsive avatar" src="{{auction.player['avatar']}}">
-    <div class="auction-info">
-      <p class="list-group-item-heading" [innerHTML]="auction.title"></p>
-      <p class="list-group-item-text description"><i class="glyphicon glyphicon-info-sign"></i>{{auction.description}}</p>
-      <div style="margin-top: 10px;">
-        <p class="list-group-item-text description"><i class="glyphicon glyphicon-user"></i>{{auction.owner['first_name'] + ' ' + auction.owner['last_name']}}<span class="offers-count count"><i class="glyphicon glyphicon-comment"></i>{{auction.offers.length}}</span></p>
-      </div>
-    </div>
+<div class="container">
+  <auctions-assign class="pull-right" *ngIf="user['viewer_type'] === '4'"></auctions-assign>
 
-  </a>
+  <button class="btn btn-success" (click)="openModal()" *ngIf="moment(aucService.current) < moment()">Создать аукцион</button><br>
+  <button class="btn btn-default btn-sm" style="margin-top: 10px;"><i class="glyphicon glyphicon-refresh" style="margin-left: 5px;" (click)="getAuctions()"></i></button>
+
 </div>
-<pagination-controls
-  (pageChange)="p = $event"
-  previousLabel=""
-  nextLabel=""
-  directionLinks="false"></pagination-controls>
+
+<div class="container">
+  <div class="list-group" *ngFor="let auction of data | paginate: { itemsPerPage: 7, currentPage: p }">
+    <a [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
+      <img class="img-responsive avatar" src="{{auction.player['avatar']}}">
+      <div class="auction-info">
+        <p class="list-group-item-heading" [innerHTML]="auction.title"></p>
+        <p class="list-group-item-text description"><i class="glyphicon glyphicon-info-sign"></i>{{auction.description}}</p>
+        <div style="margin-top: 10px;">
+          <p class="list-group-item-text description"><i class="glyphicon glyphicon-user"></i>{{auction.owner['first_name'] + ' ' + auction.owner['last_name']}}<span class="offers-count count"><i class="glyphicon glyphicon-comment"></i>{{auction.offers.length}}</span></p>
+        </div>
+      </div>
+
+    </a>
+  </div>
+  <pagination-controls
+    (pageChange)="p = $event"
+    previousLabel=""
+    nextLabel=""
+    directionLinks="false"></pagination-controls>
+</div>
+
 
 <div bsModal #addModal="bs-modal" id="addModal" class="modal fade" tabindex="-1" role="dialog"
      aria-labelledby="addAuctionModalLabel" aria-hidden="true">

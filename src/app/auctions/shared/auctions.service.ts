@@ -13,6 +13,7 @@ import {env} from "../../../.env";
 export class AuctionsService {
   public headers: Headers = new Headers({ 'Content-Type': 'application/json;charset=utf-8' });
   // private imgName = '';
+  public current;
   public paramsString = '';
   private url;
   private stateParams = {};
@@ -22,6 +23,13 @@ export class AuctionsService {
   constructor(private http: Http, public toastr: ToastsManager) {
     this.url = env('apiUrl');
     this.resetParams();
+    this.getOption().subscribe(data => {
+      this.current = data.started_at;
+      console.log(this.current);
+    });
+    /*
+    * ГЛОБАЛЬНАЯ ПЕРЕМЕННАЯ - ГОД И АУКЦИОН_OPTIONS_ID
+    **/
   }
 
   public fetchData() {
@@ -54,7 +62,13 @@ export class AuctionsService {
     console.log(parameters);
     return this.paramsString = parameters;
   }
-
+  public addOption(body: any) {
+    const params = JSON.stringify(body);
+    return this.http.post(this.url + 'option', params, { headers: this.headers }).map(this.extractData);
+  }
+  public getOption() {
+    return this.http.get(this.url + 'option').map(this.extractData);
+  }
   public getAuctions() {
     return this.http.get(this.url + 'auction').map(this.extractData);
   }

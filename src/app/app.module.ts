@@ -9,6 +9,7 @@ import {AuctionsModule} from './auctions/auctions.module';
 import {PreloadAllModules, RouterModule} from '@angular/router';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {UserService} from "./user/user.service";
+import * as $ from 'jquery';
 
 @NgModule({
   imports: [

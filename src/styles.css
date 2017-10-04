@@ -179,3 +179,15 @@ pagination-controls .ngx-pagination > li > a, .pagination > li > span {
   margin-top: 7px;
   font-size: 16px;
 }
+
+datetime .form-group {
+  margin-right: 0 !important;
+}
+
+datetime .form-group span, .form-group i {
+  margin-left: -10px;
+}
+
+datetime .form-inline.ng2-datetime {
+  display: inline-block;
+}

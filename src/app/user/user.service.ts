@@ -18,6 +18,8 @@ export class UserService {
     app_id: 0,
     user_id: 0,
     auth_key: '',
+    api_result: '',
+    viewer_type: 0,
     app_secret: 'oDzC4j9aIJlA0O1s3yUp' /* ПОМЕНЯТЬ ПОТОМ! */
   };
 
@@ -37,6 +39,12 @@ export class UserService {
             this.vk.app_id = params['api_id'];
             this.vk.user_id = params['viewer_id'];
             this.vk.auth_key = params['auth_key'];
+            this.vk.api_result = params['api_result'];
+            this.vk.viewer_type = params['viewer_type'];
+
+            // this.user = JSON.parse(this.vk.api_result);
+            // console.log(this.user.response[0]);
+
             sessionStorage.setItem('curUser', JSON.stringify(this.vk));
           } else {
             this.vk = JSON.parse(sessionStorage.getItem('curUser'));
@@ -47,12 +55,15 @@ export class UserService {
 
         this.getUser(this.vk).subscribe(data => {
           if (Object.keys(data).length === 0) {
-            this.getVKUser(this.vk).subscribe(data => {
-              this.user = data.response[0];
-              if (Object.keys(this.user).length !== 0) {
-                this.addUserToDB(this.user);
-              }
-            });
+            this.user = JSON.parse(this.vk.api_result);
+            console.log(this.user.response);
+            this.addUserToDB(this.user.response[0]);
+            // this.getVKUser(this.vk).subscribe(data => {
+            //   this.user = data.response[0];
+            //   if (Object.keys(this.user).length !== 0) {
+            //     this.addUserToDB(this.user);
+            //   }
+            // });
           } else {
             this.user = data;
           }
