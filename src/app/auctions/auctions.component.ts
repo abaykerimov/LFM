@@ -31,10 +31,29 @@ export class AuctionsComponent implements OnInit {
     this.aucService.onFetchData().subscribe(() => this.getAuctions());
   }
 
+  public check;
+  public getPreffered(event) {
+    this.check = event.target.checked;
+    console.log(this.check);
+    if (event.target.checked) {
+      this.getUserBookmarks();
+    } else {
+      this.getAuctions();
+    }
+  }
+
   public getAuctions() {
     this.aucService.getAuctions().subscribe((data) => {
       this.data = data;
       this.aucService.flash('Аукцион обновлен', 'success');
+    });
+  }
+
+  public getUserBookmarks() {
+    this.aucService.getUserBookmarks(this.user.user_id).subscribe(data => {
+      this.data = data;
+      console.log(this.data);
+      this.aucService.flash('Избранные загружены', 'success');
     });
   }
 

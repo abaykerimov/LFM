@@ -90,7 +90,7 @@ export class AuctionsCalculatorComponent implements OnInit {
       let arr = [];
       if (data.length > 0) {
         data.forEach((item) => {
-          arr.push({id: item.id, text: `<a class="select-items" href=https://sofifa.com/player/${item.id} target="_blank">${item.title}</a>`, position: item.position, skill: item.skill, date_of_birth: item.date_of_birth, team: item.team[0].title});
+          arr.push({id: item.id, text: `<a class="select-items" href=https://sofifa.com/player/${item.id} target="_blank">${item.title}</a>`, position: item.position, skill: item.skill, date_of_birth: item.date_of_birth, team: item.team.title});
         });
       }
       this.player.all = arr;

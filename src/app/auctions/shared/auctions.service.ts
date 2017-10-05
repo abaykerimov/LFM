@@ -67,6 +67,12 @@ export class AuctionsService {
     console.log(parameters);
     return this.paramsString = parameters;
   }
+
+  public addBookmark(body: any) {
+    const params = JSON.stringify(body);
+    return this.http.post(this.url + 'bookmarks', params, { headers: this.headers }).map(this.extractData);
+  }
+
   public addOption(body: any) {
     const params = JSON.stringify(body);
     return this.http.post(this.url + 'option', params, { headers: this.headers }).map(this.extractData);
@@ -78,6 +84,9 @@ export class AuctionsService {
     return this.http.get(this.url + 'auction').map(this.extractData);
   }
 
+  public getUserBookmarks(id) {
+    return this.http.get(this.url + 'bookmarks/' + id).map(this.extractData);
+  }
   public getOffersByAuction(id: any) {
     return this.http.get(this.url + 'offer/' + id).map(this.extractData);
   }

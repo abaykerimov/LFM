@@ -111,6 +111,18 @@ export class AuctionsShowComponent implements OnInit {
     this.team.title = event.text;
   }
 
+  public addBookmark() {
+    let body = {
+      user_id: this.user.user_id,
+      auction_id: this.auction.id
+    };
+    this.aucService.addBookmark(body).subscribe(data => {
+      this.aucService.flash('Добавлено в Избранные', 'success');
+    }, error => {
+      this.aucService.flash('Произошла ошибка', 'danger');
+    });
+  }
+
   public alert = {
     type: '',
     text: ''

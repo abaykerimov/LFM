@@ -3,10 +3,31 @@
 
   <button class="btn btn-success" (click)="openModal()" *ngIf="moment(aucService.option.starts) < moment()">Создать аукцион</button><br>
   <button class="btn btn-default btn-sm" style="margin-top: 10px;" (click)="getAuctions()"><i class="glyphicon glyphicon-refresh" style="margin-left: 5px;"></i></button>
-
+  <label class="label pull-right bookmark">Избранные<input type="checkbox" class="checkbox-inline" (change)="getPreffered($event)"></label>
 </div>
 
-<div class="container">
+<div class="container" *ngIf="check">
+  <div class="list-group" *ngFor="let auction of data | paginate: { itemsPerPage: 7, currentPage: p }">
+    <a [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
+      <img class="img-responsive avatar" src="{{auction.auction[0].player.avatar}}">
+      <div class="auction-info">
+        <p class="list-group-item-heading" [innerHTML]="auction.auction[0].title"></p>
+        <p class="list-group-item-text description"><i class="glyphicon glyphicon-info-sign"></i>{{auction.auction[0].description}}</p>
+        <div style="margin-top: 10px;">
+          <p class="list-group-item-text description"><i class="glyphicon glyphicon-user"></i>{{auction.auction[0].owner['first_name'] + ' ' + auction.auction[0].owner['last_name']}}<span class="offers-count count"><i class="glyphicon glyphicon-comment"></i>{{auction.auction[0].offers.length}}</span></p>
+        </div>
+      </div>
+    </a>
+  </div>
+  <pagination-controls
+    (pageChange)="p = $event"
+    previousLabel=""
+    nextLabel=""
+    directionLinks="false"></pagination-controls>
+</div>
+
+
+<div class="container" *ngIf="!check">
   <div class="list-group" *ngFor="let auction of data | paginate: { itemsPerPage: 7, currentPage: p }">
     <a [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
       <img class="img-responsive avatar" src="{{auction.player['avatar']}}">
@@ -17,7 +38,6 @@
           <p class="list-group-item-text description"><i class="glyphicon glyphicon-user"></i>{{auction.owner['first_name'] + ' ' + auction.owner['last_name']}}<span class="offers-count count"><i class="glyphicon glyphicon-comment"></i>{{auction.offers.length}}</span></p>
         </div>
       </div>
-
     </a>
   </div>
   <pagination-controls
@@ -26,7 +46,6 @@
     nextLabel=""
     directionLinks="false"></pagination-controls>
 </div>
-
 
 <div bsModal #addModal="bs-modal" id="addModal" class="modal fade" tabindex="-1" role="dialog"
      aria-labelledby="addAuctionModalLabel" aria-hidden="true">
