@@ -2,8 +2,6 @@ import {
   Component, OnInit, ViewChild, ViewContainerRef
 } from '@angular/core';
 import {AuctionsService} from './shared/auctions.service';
-import {NgForm} from '@angular/forms';
-import {Router} from '@angular/router';
 import {ModalDirective} from 'ngx-bootstrap';
 import * as moment from 'moment';
 import {Subject} from 'rxjs/Subject';
@@ -36,7 +34,7 @@ export class AuctionsComponent implements OnInit {
   public getAuctions() {
     this.aucService.getAuctions().subscribe((data) => {
       this.data = data;
-      console.log(this.data);
+      this.aucService.flash('Аукцион обновлен', 'success');
     });
   }
 
@@ -44,7 +42,6 @@ export class AuctionsComponent implements OnInit {
     this.searchTerms.next(value);
   }
   public save(form: any) {
-    console.log(form.value);
     this.aucService.addAuction(form).subscribe((data) => {
         this.addModal.hide();
         this.aucService.flash('Аукцион успешно создан!', 'success');

@@ -5,11 +5,14 @@
     <div class="panel-heading">
       <img src="{{auction.player['avatar']}}" class="img-responsive avatar" style="margin-top: -96px;">
       <div class="auction-info">
-        <p><i class="glyphicon glyphicon-user"></i> {{auction.player['title']}}</p>
+        <p><i class="glyphicon glyphicon-user"></i>{{auction.player['title']}}</p>
         <p><i class="glyphicon glyphicon glyphicon-knight"></i>{{auction.player['position']}}</p>
         <p><i class="glyphicon glyphicon glyphicon-signal"></i>{{auction.player['skill']}}</p>
         <p><i class="glyphicon glyphicon glyphicon-flash"></i>{{moment(auction.player['date_of_birth']).format('DD.MM.YYYY')}}</p>
       </div>
+
+      <a><span class="glyphicon glyphicon-bookmark pull-right"></span></a>
+
     </div>
     <div class="panel-body">
       {{auction['description']}}
@@ -18,7 +21,7 @@
 
   <div class="panel panel-default">
     <div class="panel-body">
-      <p *ngIf="alert.type === 'time-is-over'" class="text-danger" [innerHTML]="alert.text"></p>
+      <h5 *ngIf="alert.type === 'time-is-over'" class="text-danger" [innerHTML]="alert.text"></h5>
       <div class="col-md-6" *ngIf="alert.type !== 'time-is-over'">
         <form #form="ngForm" (ngSubmit)="save(form)" class="form-horizontal">
           <div class="form-group">
@@ -46,7 +49,7 @@
 
 
   <hr>
-  <button class="btn btn-default btn-sm" style="margin-bottom: 5px;"><i class="glyphicon glyphicon-refresh" style="margin-left: 5px;" (click)="getOffers()"></i></button>
+  <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="getOffers()"><i class="glyphicon glyphicon-refresh" style="margin-left: 5px;"></i></button>
 
   <blockquote *ngFor="let offer of offers">
     <p>{{offer.team.title + ', ' + offer.cost + ' млн.' }} <span style="float: right; font-size: 12px;" [innerHTML]="moment(offer.created_at, 'YYYY-MM-DD HH:mm:ss').format('HH:mm DD.MM.YYYY')"></span></p>

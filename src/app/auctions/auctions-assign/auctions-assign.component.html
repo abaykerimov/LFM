@@ -1,13 +1,41 @@
-<form #form="ngForm" (ngSubmit)="save(form)" class="form-horizontal">
-  <fieldset>
-    <datetime [timepicker]="{ showMeridian: false, minuteStep: 1, placeholder: 'Время аукциона'}" [datepicker]="datepickerOpts" name="started_at" [(ngModel)]="date"></datetime>
-    <button class="btn btn-default"><i class="glyphicon glyphicon-check" style="margin-right: 0;"></i></button>
+<button class="btn btn-default btn-sm" (click)="openModal()"><i class="glyphicon glyphicon-plus" style="margin-right: 0"></i></button>
 
-    <!--<div class="form-group">-->
-      <!--<div class="col-lg-2 col-lg-offset-4 submit">-->
-        <!--<button type="submit" class="btn btn-success" style="width: 100%;">Посчитать</button>-->
+<div bsModal #modal="bs-modal" id="modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--<h5 class="modal-title pull-left">Укажите дату и время аукциона</h5>-->
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #form="ngForm" (ngSubmit)="save(form)" class="form-horizontal">
+          <fieldset>
+            <div class="form-group">
+              <div class="col-md-10 col-md-offset-1">
+                <datetime [timepicker]="{showMeridian: false, minuteStep: 1, placeholder: 'Время аукциона'}" [datepicker]="datepickerOpts" name="started_at" [(ngModel)]="date" required></datetime>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-10 col-md-offset-1">
+                <div class="input-group">
+                  <input class="form-control" type="number" name="turnir_year" [ngModel]="'2017'" required>
+                  <span class="input-group-addon">
+                  <i class="glyphicon glyphicon-calendar"></i>
+                </span>
+                </div>
+              </div>
 
-      <!--</div>-->
-    <!--</div>-->
-  </fieldset>
-</form>
+            </div>
+            <div class="form-group">
+              <div class="col-md-10 col-md-offset-1">
+                <button class="btn btn-primary" [disabled]="!form.valid">Назначить время</button>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -58,7 +58,7 @@ export class AuctionsCalculatorComponent implements OnInit {
 
   submit(form: NgForm) {
     if (this.param) {
-      form.value.auctions_option_id = 1;
+      form.value.auctions_option_id = this.aucService.option.id;
       form.value.title = this.player.title;
       form.value.description = 'Из ' + this.player.team + ' в ' + this.team.title + ' за ' + this.player.cost + ' млн.';
       form.value.player_id = this.player.id;
@@ -94,7 +94,6 @@ export class AuctionsCalculatorComponent implements OnInit {
         });
       }
       this.player.all = arr;
-      console.log(this.player.all);
     });
     this.search(' ');
   }
@@ -129,7 +128,7 @@ export class AuctionsCalculatorComponent implements OnInit {
           this.player.title = event.text;
           this.player.position = item.position;
           this.player.skill = item.skill;
-          this.player.age = moment(this.aucService.current).diff(moment(item.date_of_birth), 'years');
+          this.player.age = this.aucService.option.year - Number(moment(item.date_of_birth).format('YYYY'));
           this.player.team = item.team;
           this.calculateCost(this.player);
         }

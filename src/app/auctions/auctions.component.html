@@ -1,8 +1,8 @@
 <div class="container">
   <auctions-assign class="pull-right" *ngIf="user['viewer_type'] === '4'"></auctions-assign>
 
-  <button class="btn btn-success" (click)="openModal()" *ngIf="moment(aucService.current) < moment()">Создать аукцион</button><br>
-  <button class="btn btn-default btn-sm" style="margin-top: 10px;"><i class="glyphicon glyphicon-refresh" style="margin-left: 5px;" (click)="getAuctions()"></i></button>
+  <button class="btn btn-success" (click)="openModal()" *ngIf="moment(aucService.option.starts) < moment()">Создать аукцион</button><br>
+  <button class="btn btn-default btn-sm" style="margin-top: 10px;" (click)="getAuctions()"><i class="glyphicon glyphicon-refresh" style="margin-left: 5px;"></i></button>
 
 </div>
 

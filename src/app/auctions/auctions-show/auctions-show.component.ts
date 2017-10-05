@@ -47,7 +47,6 @@ export class AuctionsShowComponent implements OnInit {
         this.aucService.showAuction(this.auction_id).subscribe(
           (data) => {
             this.auction = data;
-            console.log(this.auction);
           });
       }
     );
@@ -58,7 +57,8 @@ export class AuctionsShowComponent implements OnInit {
       this.aucService.getOffersByAuction(this.auction_id).subscribe(
         (data) => {
           this.offers = data;
-          console.log(this.offers);
+          console.log(data);
+          this.aucService.flash('Комментарии загружены', 'success');
           this.timer();
         });
     }
@@ -68,7 +68,6 @@ export class AuctionsShowComponent implements OnInit {
     form.value.auction_id = this.auction_id;
     form.value.team_id = this.team.id;
     form.value.user_id = this.user['user_id'];
-    console.log(form.value);
     if (this.alert.type === 'success') {
       this.aucService.addOffer(form.value).subscribe((data) => {
           this.aucService.flash('Ставка сделана!', 'success');
@@ -99,7 +98,6 @@ export class AuctionsShowComponent implements OnInit {
         });
       }
       this.team.all = arr;
-      console.log(this.team.all);
     });
     this.search(' ');
   }
@@ -141,7 +139,11 @@ export class AuctionsShowComponent implements OnInit {
 
     if (moment() > this.finishTime) {
       this.alert.type = 'time-is-over';
-      this.alert.text = 'Время!';
+      if (this.offers.length > 0) {
+        this.alert.text = this.auction.player['title'] + ' переходит в ' + this.offers[0].team.title + ' за ' + this.offers[0].cost + ' млн.';
+      } else {
+        this.alert.text = this.auction.player['title'] + ' переходит в ' + this.auction.team.title + ' за ' + this.auction.initial_cost + ' млн.';
+      }
     }
   }
 

@@ -45,6 +45,18 @@ auctions .players-list p.description {
   width: 89%;
   display: inline-block;
 }
+
+auctions-show .auction-info {
+  width: 80%;
+  margin-left: 30px;
+}
+
+auctions-show .glyphicon {
+  /*color: #000000;*/
+  /*background: #ffffff;*/
+  font-size: 16px;
+}
+
 @media (max-width: 764px) {
   .avatar {
     width: 69px;
@@ -182,6 +194,7 @@ pagination-controls .ngx-pagination > li > a, .pagination > li > span {
 
 datetime .form-group {
   margin-right: 0 !important;
+  margin-left: 0 !important;
 }
 
 datetime .form-group span, .form-group i {

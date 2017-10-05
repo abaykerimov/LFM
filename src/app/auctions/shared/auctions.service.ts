@@ -13,7 +13,11 @@ import {env} from "../../../.env";
 export class AuctionsService {
   public headers: Headers = new Headers({ 'Content-Type': 'application/json;charset=utf-8' });
   // private imgName = '';
-  public current;
+  public option = {
+    id: 0,
+    year: 0,
+    starts: ''
+  };
   public paramsString = '';
   private url;
   private stateParams = {};
@@ -24,8 +28,9 @@ export class AuctionsService {
     this.url = env('apiUrl');
     this.resetParams();
     this.getOption().subscribe(data => {
-      this.current = data.started_at;
-      console.log(this.current);
+      this.option.id = data.id;
+      this.option.year = data.turnir_year;
+      this.option.starts = data.started_at;
     });
     /*
     * ГЛОБАЛЬНАЯ ПЕРЕМЕННАЯ - ГОД И АУКЦИОН_OPTIONS_ID
