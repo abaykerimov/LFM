@@ -83,7 +83,7 @@ auctions-bookmark-set {
   right: 20px;
   top: 10px;
   font-size: 18px;
-  z-index: 9999999;
+  z-index: 9999;
 }
 
 .list-group {
@@ -128,6 +128,9 @@ auctions-bookmark .players-list.red {
   .auction-info {
     width: 87% !important;
   }
+  auctions-show .auction-info {
+    width: 80% !important;
+  }
 }
 
 @media (max-width: 667px) {
@@ -144,14 +147,17 @@ auctions-bookmark .players-list.red {
 
 @media (max-width: 444px) {
   .auction-info {
-    width: 77% !important;
+    width: 76% !important;
+  }
+  auctions-show .auction-info {
+    width: 71% !important;
   }
 }
 
 
-@media (max-width: 342px) {
+@media (max-width: 420px) {
   .auction-info {
-    width: 60% !important;
+    width: 70% !important;
   }
 }
 
@@ -293,4 +299,8 @@ auctions label.bookmark {
 auctions label.bookmark .checkbox-inline {
   margin-bottom: 0;
   margin-left: 5px;
+}
+
+auctions #addModal {
+  z-index: 9999999;
 }

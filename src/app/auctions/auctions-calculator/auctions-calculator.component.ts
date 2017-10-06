@@ -172,11 +172,10 @@ export class AuctionsCalculatorComponent implements OnInit {
     if (result > 120000000) {
       result = 120000000;
     }
-    if (result === 0 || result < 0) {
-      result = 1;
-    }
-
     this.player.cost = Math.round(result / 1000000);
+    if (this.player.cost === 0 || this.player.cost < 0) {
+      this.player.cost = 1;
+    }
   }
 
   public param: Boolean;

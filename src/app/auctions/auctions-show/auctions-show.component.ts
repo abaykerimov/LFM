@@ -49,7 +49,6 @@ export class AuctionsShowComponent implements OnInit {
         this.aucService.showAuction(this.auction_id).subscribe(
           (data) => {
             this.auction = data;
-            this.timer();
           });
       }
     );
@@ -60,7 +59,9 @@ export class AuctionsShowComponent implements OnInit {
       this.aucService.getOffersByAuction(this.auction_id).subscribe(
         (data) => {
           this.offers = data;
-          // this.aucService.flash('Комментарии загружены', 'success');
+          if (this.auction.final_cost === 0) {
+            this.timer();
+          }
         });
     }
   }
@@ -146,6 +147,7 @@ export class AuctionsShowComponent implements OnInit {
       } else {
         this.alert.text = this.auction.player['title'] + ' переходит в ' + this.auction.team.title + ' за ' + this.auction.initial_cost + ' млн.';
       }
+      this.updateAuction();
     }
   }
 
@@ -156,9 +158,7 @@ export class AuctionsShowComponent implements OnInit {
     if (this.offers.length > 0) {
       body.final_cost = this.offers[0].cost;
     }
-    this.aucService.updateAuction(body, this.auction_id).subscribe(data => {
-
-    });
+    this.aucService.updateAuction(body, this.auction_id).subscribe();
   }
   goBack() {
     this.location.back();
