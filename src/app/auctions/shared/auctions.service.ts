@@ -68,9 +68,18 @@ export class AuctionsService {
     return this.paramsString = parameters;
   }
 
+  public getBookmark(user_id, auction_id) {
+    return this.http.get(this.url + 'getBookmark/' + user_id + '/' + auction_id).map(this.extractData);
+  }
+
   public addBookmark(body: any) {
     const params = JSON.stringify(body);
     return this.http.post(this.url + 'bookmarks', params, { headers: this.headers }).map(this.extractData);
+  }
+
+  public deleteBookmark(id: any) {
+    // let body = JSON.stringify({id: id});
+    return this.http.delete(this.url + 'bookmarks/' + id, { headers: this.headers }).map(this.extractData);
   }
 
   public addOption(body: any) {

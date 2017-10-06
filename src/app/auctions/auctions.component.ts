@@ -4,8 +4,6 @@ import {
 import {AuctionsService} from './shared/auctions.service';
 import {ModalDirective} from 'ngx-bootstrap';
 import * as moment from 'moment';
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
 import {UserService} from "../user/user.service";
 
 @Component({
@@ -24,7 +22,6 @@ export class AuctionsComponent implements OnInit {
   }
   public data = [];
   public moment = moment;
-  private searchTerms = new Subject<string>();
 
   ngOnInit() {
     this.getAuctions();
@@ -34,38 +31,19 @@ export class AuctionsComponent implements OnInit {
   public check;
   public getPreffered(event) {
     this.check = event.target.checked;
-    console.log(this.check);
-    if (event.target.checked) {
-      this.getUserBookmarks();
-    } else {
-      this.getAuctions();
-    }
   }
 
   public getAuctions() {
     this.aucService.getAuctions().subscribe((data) => {
       this.data = data;
-      this.aucService.flash('Аукцион обновлен', 'success');
     });
   }
 
-  public getUserBookmarks() {
-    this.aucService.getUserBookmarks(this.user.user_id).subscribe(data => {
-      this.data = data;
-      console.log(this.data);
-      this.aucService.flash('Избранные загружены', 'success');
-    });
-  }
-
-  public search(value: any = '') {
-    this.searchTerms.next(value);
-  }
   public save(form: any) {
     this.aucService.addAuction(form).subscribe((data) => {
         this.addModal.hide();
         this.aucService.flash('Аукцион успешно создан!', 'success');
         this.aucService.fetchData();
-        form.reset();
       }, (error) => {
         this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
       }

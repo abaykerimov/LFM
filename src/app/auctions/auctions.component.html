@@ -6,46 +6,9 @@
   <label class="label pull-right bookmark">Избранные<input type="checkbox" class="checkbox-inline" (change)="getPreffered($event)"></label>
 </div>
 
-<div class="container" *ngIf="check">
-  <div class="list-group" *ngFor="let auction of data | paginate: { itemsPerPage: 7, currentPage: p }">
-    <a [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
-      <img class="img-responsive avatar" src="{{auction.auction[0].player.avatar}}">
-      <div class="auction-info">
-        <p class="list-group-item-heading" [innerHTML]="auction.auction[0].title"></p>
-        <p class="list-group-item-text description"><i class="glyphicon glyphicon-info-sign"></i>{{auction.auction[0].description}}</p>
-        <div style="margin-top: 10px;">
-          <p class="list-group-item-text description"><i class="glyphicon glyphicon-user"></i>{{auction.auction[0].owner['first_name'] + ' ' + auction.auction[0].owner['last_name']}}<span class="offers-count count"><i class="glyphicon glyphicon-comment"></i>{{auction.auction[0].offers.length}}</span></p>
-        </div>
-      </div>
-    </a>
-  </div>
-  <pagination-controls
-    (pageChange)="p = $event"
-    previousLabel=""
-    nextLabel=""
-    directionLinks="false"></pagination-controls>
-</div>
+<auctions-all *ngIf="!check" [user]="user" [data]="data"></auctions-all>
+<auctions-bookmark *ngIf="check" [user]="user"></auctions-bookmark>
 
-
-<div class="container" *ngIf="!check">
-  <div class="list-group" *ngFor="let auction of data | paginate: { itemsPerPage: 7, currentPage: p }">
-    <a [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
-      <img class="img-responsive avatar" src="{{auction.player['avatar']}}">
-      <div class="auction-info">
-        <p class="list-group-item-heading" [innerHTML]="auction.title"></p>
-        <p class="list-group-item-text description"><i class="glyphicon glyphicon-info-sign"></i>{{auction.description}}</p>
-        <div style="margin-top: 10px;">
-          <p class="list-group-item-text description"><i class="glyphicon glyphicon-user"></i>{{auction.owner['first_name'] + ' ' + auction.owner['last_name']}}<span class="offers-count count"><i class="glyphicon glyphicon-comment"></i>{{auction.offers.length}}</span></p>
-        </div>
-      </div>
-    </a>
-  </div>
-  <pagination-controls
-    (pageChange)="p = $event"
-    previousLabel=""
-    nextLabel=""
-    directionLinks="false"></pagination-controls>
-</div>
 
 <div bsModal #addModal="bs-modal" id="addModal" class="modal fade" tabindex="-1" role="dialog"
      aria-labelledby="addAuctionModalLabel" aria-hidden="true">
@@ -62,8 +25,4 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="spinner-overlay" *ngIf="data.length == 0">
-  <spinner [size]="50" [tickness]="1" style="position: fixed !important;" [color]="'#ffffff'" [opacity]="'0.1'"></spinner>
 </div>

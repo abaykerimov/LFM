@@ -10,9 +10,6 @@
         <p><i class="glyphicon glyphicon glyphicon-signal"></i>{{auction.player['skill']}}</p>
         <p><i class="glyphicon glyphicon glyphicon-flash"></i>{{moment(auction.player['date_of_birth']).format('DD.MM.YYYY')}}</p>
       </div>
-
-      <span class="glyphicon glyphicon-bookmark pull-right" data-toggle="tooltip" data-placement="left" title="Добавить аукцион в Избранные" data-original-title="Добавить аукцион в Избранные" (click)="addBookmark()"></span>
-
     </div>
     <div class="panel-body">
       {{auction['description']}}

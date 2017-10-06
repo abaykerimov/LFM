@@ -51,7 +51,7 @@ auctions-show .auction-info {
   margin-left: 15px;
 }
 
-auctions-show .glyphicon-bookmark {
+auctions-bookmark-set {
   font-size: 18px;
   color: #ffffff;
   text-shadow: -1px 0 #666666, 0 1px #666666, 1px 0 #666666, 0 -1px #666666;
@@ -64,10 +64,55 @@ auctions-show .glyphicon-bookmark {
   transition:color .2s ease-out, background 1s ease-in;
 }
 
-auctions-show .glyphicon-bookmark:hover {
+auctions-bookmark-set:hover {
   color: #cb171e;
   text-shadow: -1px 0 #666666, 0 1px #666666, 1px 0 #666666, 0 -1px #666666;
 }
+
+
+auctions-bookmark-set .clicked {
+  color: #cb3327;
+}
+
+.list-group-item-heading {
+  display: inline-block;
+}
+
+auctions-bookmark-set {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  font-size: 18px;
+  z-index: 9999999;
+}
+
+.list-group {
+  position: relative;
+}
+
+@-webkit-keyframes alert {
+  0% {
+    background-color: #ff968c;
+    opacity:1;
+  }
+  22% {
+    background-color: #ff726b;
+  }
+  77% {
+    background-color: #ff6671;
+  }
+  100% {
+    background-color: #cb403e;
+  }
+}
+
+auctions-bookmark .players-list.red {
+  -webkit-animation-name: alert;
+  -webkit-animation-duration: 3500ms;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease-in-out;
+}
+
 
 @media (max-width: 764px) {
   .avatar {
@@ -75,15 +120,34 @@ auctions-show .glyphicon-bookmark:hover {
     margin-top: -60px;
   }
   .auction-info {
-    width: 89% !important;
+    width: 87% !important;
   }
 }
 
 @media (max-width: 738px) {
   .auction-info {
-    width: 70% !important;
+    width: 87% !important;
   }
 }
+
+@media (max-width: 667px) {
+  .auction-info {
+    width: 86% !important;
+  }
+}
+
+@media (max-width: 625px) {
+  .auction-info {
+    width: 85% !important;
+  }
+}
+
+@media (max-width: 444px) {
+  .auction-info {
+    width: 77% !important;
+  }
+}
+
 
 @media (max-width: 342px) {
   .auction-info {

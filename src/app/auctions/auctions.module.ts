@@ -17,6 +17,9 @@ import {AuctionsCalculatorComponent} from "./auctions-calculator/auctions-calcul
 import {AuctionsAssignComponent} from "./auctions-assign/auctions-assign.component";
 import { NKDatetimeModule } from 'ng2-datetime/ng2-datetime';
 import {DateTimePickerDirective} from "ng2-eonasdan-datetimepicker/dist/datetimepicker.directive";
+import {AuctionsAllComponent} from "./auctions-all/auctions-all.component";
+import {AuctionsBookmarkComponent} from "./auctions-bookmark/auctions-bookmark.component";
+import {AuctionsBookmarkSetComponent} from "./auctions-bookmark-set/auctions-bookmark-set.component";
 
 @NgModule({
   imports: [
@@ -39,6 +42,9 @@ import {DateTimePickerDirective} from "ng2-eonasdan-datetimepicker/dist/datetime
     AuctionsComponent,
     AuctionsCalculatorComponent,
     AuctionsAssignComponent,
+    AuctionsAllComponent,
+    AuctionsBookmarkComponent,
+    AuctionsBookmarkSetComponent
     // DateTimePickerDirective
   ],
   exports: [

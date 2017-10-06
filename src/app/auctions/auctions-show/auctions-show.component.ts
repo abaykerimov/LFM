@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import {AuctionsService} from '../shared/auctions.service';
 import {NgForm} from '@angular/forms';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import * as moment from 'moment';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
@@ -28,6 +28,8 @@ export class AuctionsShowComponent implements OnInit {
   };
   private searchTerms = new Subject<string>();
   private user;
+  public bookmark = [];
+  public clicked = false;
   constructor(private aucService: AuctionsService, private route: ActivatedRoute, private vcr: ViewContainerRef, private location: Location, private uService: UserService) {
     this.aucService.toastr.setRootViewContainerRef(this.vcr);
     this.user = JSON.parse(sessionStorage.getItem('curUser'));
@@ -47,6 +49,7 @@ export class AuctionsShowComponent implements OnInit {
         this.aucService.showAuction(this.auction_id).subscribe(
           (data) => {
             this.auction = data;
+            this.timer();
           });
       }
     );
@@ -57,9 +60,7 @@ export class AuctionsShowComponent implements OnInit {
       this.aucService.getOffersByAuction(this.auction_id).subscribe(
         (data) => {
           this.offers = data;
-          console.log(data);
-          this.aucService.flash('Комментарии загружены', 'success');
-          this.timer();
+          // this.aucService.flash('Комментарии загружены', 'success');
         });
     }
   }
@@ -72,7 +73,7 @@ export class AuctionsShowComponent implements OnInit {
       this.aucService.addOffer(form.value).subscribe((data) => {
           this.aucService.flash('Ставка сделана!', 'success');
           this.aucService.fetchData();
-          // form.reset();
+          form.reset();
         }, (error) => {
           this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
         }
@@ -111,18 +112,6 @@ export class AuctionsShowComponent implements OnInit {
     this.team.title = event.text;
   }
 
-  public addBookmark() {
-    let body = {
-      user_id: this.user.user_id,
-      auction_id: this.auction.id
-    };
-    this.aucService.addBookmark(body).subscribe(data => {
-      this.aucService.flash('Добавлено в Избранные', 'success');
-    }, error => {
-      this.aucService.flash('Произошла ошибка', 'danger');
-    });
-  }
-
   public alert = {
     type: '',
     text: ''
@@ -144,9 +133,10 @@ export class AuctionsShowComponent implements OnInit {
 
   private finishTime;
   protected timer() {
-    this.finishTime = moment(this.auction['created_at']).add(20, 'm');
     if (this.offers.length > 0) {
       this.finishTime = moment(this.offers[0].created_at).add(20, 'm');
+    } else {
+      this.finishTime = moment(this.auction['created_at']).add(20, 'm');
     }
 
     if (moment() > this.finishTime) {

@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="list-group" *ngFor="let auction of data | paginate: { itemsPerPage: 7, currentPage: p }">
+    <auctions-bookmark-set [user_id]="user.user_id" [auction_id]="auction.id"></auctions-bookmark-set>
+
+    <a [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
+      <img class="img-responsive avatar" src="{{auction.player['avatar']}}">
+      <div class="auction-info">
+        <p class="list-group-item-heading" [innerHTML]="auction.title"></p>
+        <p class="list-group-item-text description"><i class="glyphicon glyphicon-info-sign"></i>{{auction.description}}
+        </p>
+        <div style="margin-top: 10px;">
+          <p class="list-group-item-text description"><i class="glyphicon glyphicon-user"></i>{{auction.owner['first_name']
+            + ' ' + auction.owner['last_name']}}<span class="offers-count count"><i
+              class="glyphicon glyphicon-comment"></i>{{auction.offers.length}}</span></p>
+        </div>
+      </div>
+    </a>
+  </div>
+  <pagination-controls
+    (pageChange)="p = $event"
+    previousLabel=""
+    nextLabel=""
+    directionLinks="false"></pagination-controls>
+</div>
