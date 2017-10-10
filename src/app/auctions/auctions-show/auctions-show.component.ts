@@ -59,8 +59,9 @@ export class AuctionsShowComponent implements OnInit {
       this.aucService.getOffersByAuction(this.auction_id).subscribe(
         (data) => {
           this.offers = data;
-          if (this.auction.final_cost === 0) {
-            this.timer();
+          this.timer();
+          if (this.auction && this.auction.final_cost === 0) {
+            this.updateAuction();
           }
         });
     }
@@ -147,7 +148,6 @@ export class AuctionsShowComponent implements OnInit {
       } else {
         this.alert.text = this.auction.player['title'] + ' переходит в ' + this.auction.team.title + ' за ' + this.auction.initial_cost + ' млн.';
       }
-      this.updateAuction();
     }
   }
 

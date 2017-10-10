@@ -18,7 +18,7 @@
 
   <div class="panel panel-default">
     <div class="panel-body">
-      <h5 *ngIf="alert.type === 'time-is-over'" class="text-danger" [innerHTML]="alert.text"></h5>
+      <h5 *ngIf="alert.type === 'time-is-over' && auction" class="text-danger" [innerHTML]="alert.text"></h5>
       <div class="col-md-6" *ngIf="alert.type !== 'time-is-over'">
         <form #form="ngForm" (ngSubmit)="save(form)" class="form-horizontal">
           <div class="form-group">
