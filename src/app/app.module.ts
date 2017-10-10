@@ -10,6 +10,7 @@ import {PreloadAllModules, RouterModule} from '@angular/router';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {UserService} from "./user/user.service";
 import * as $ from 'jquery';
+import {CoreModule} from "./core/core.module";
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import * as $ from 'jquery';
     JsonpModule,
     AuctionsModule,
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
+    CoreModule
   ],
   declarations: [
     AppComponent,

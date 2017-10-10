@@ -8,6 +8,7 @@ import {Subject} from 'rxjs/Subject';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import {ActivatedRoute, Router} from '@angular/router';
 import {env} from "../../../.env";
+import {LaravelEchoService} from "../../core/laravel-echo.service"
 
 @Injectable()
 export class AuctionsService {
@@ -23,8 +24,11 @@ export class AuctionsService {
   private stateParams = {};
 
   private updateData = new Subject<boolean>();
+  public echoSub;
 
-  constructor(private http: Http, public toastr: ToastsManager) {
+  constructor(private http: Http, public toastr: ToastsManager, protected echo: LaravelEchoService) {
+    this.connectBroadcast();
+
     this.url = env('apiUrl');
     this.resetParams();
     this.getOption().subscribe(data => {
@@ -35,6 +39,15 @@ export class AuctionsService {
     /*
     * ГЛОБАЛЬНАЯ ПЕРЕМЕННАЯ - ГОД И АУКЦИОН_OPTIONS_ID
     **/
+  }
+
+  protected connectBroadcast() {
+    this.echo.echo.subscribe((echo) => {
+      if (echo) {
+        console.log(echo);
+        this.echoSub = echo;
+      }
+    });
   }
 
   public fetchData() {
