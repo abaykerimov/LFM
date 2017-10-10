@@ -37,9 +37,9 @@ export class AuctionsShowComponent implements OnInit {
 
   ngOnInit() {
     this.showAuction();
-    this.getOffers();
+    // this.getOffers();
     this.searchTeams();
-    this.aucService.onFetchData().subscribe(() => this.getOffers());
+    this.aucService.onFetchData().subscribe(() => this.getOffers(this.auction));
   }
 
   protected showAuction() {
@@ -49,22 +49,18 @@ export class AuctionsShowComponent implements OnInit {
         this.aucService.showAuction(this.auction_id).subscribe(
           (data) => {
             this.auction = data;
+            this.getOffers(this.auction);
           });
       }
     );
   }
 
-  protected getOffers() {
-    if (this.auction_id !== 0) {
-      this.aucService.getOffersByAuction(this.auction_id).subscribe(
-        (data) => {
-          this.offers = data;
-          this.timer();
-          if (this.auction && this.auction.final_cost === 0) {
-            this.updateAuction();
-          }
-        });
-    }
+  protected getOffers(value: any) {
+    this.aucService.getOffersByAuction(value['id']).subscribe(
+      (data) => {
+        this.offers = data;
+        this.timer(value, data);
+      });
   }
 
   protected save(form: NgForm) {
@@ -134,29 +130,31 @@ export class AuctionsShowComponent implements OnInit {
   }
 
   private finishTime;
-  protected timer() {
-    if (this.offers.length > 0) {
-      this.finishTime = moment(this.offers[0].created_at).add(20, 'm');
-    } else {
-      this.finishTime = moment(this.auction['created_at']).add(20, 'm');
+  protected timer(auction: any, offer: any) {
+    this.finishTime = moment(auction['created_at']).add(20, 'm');
+    if (offer.length > 0) {
+      this.finishTime = moment(offer[0].created_at).add(20, 'm');
     }
 
     if (moment() > this.finishTime) {
       this.alert.type = 'time-is-over';
-      if (this.offers.length > 0) {
-        this.alert.text = this.auction.player['title'] + ' переходит в ' + this.offers[0].team.title + ' за ' + this.offers[0].cost + ' млн.';
+      if (offer.length > 0) {
+        this.alert.text = auction.player['title'] + ' переходит в ' + offer[0].team.title + ' за ' + offer[0].cost + ' млн.';
       } else {
-        this.alert.text = this.auction.player['title'] + ' переходит в ' + this.auction.team.title + ' за ' + this.auction.initial_cost + ' млн.';
+        this.alert.text = auction.player['title'] + ' переходит в ' + auction.team.title + ' за ' + auction.initial_cost + ' млн.';
+      }
+      if (auction['final_cost'] === 0) {
+        this.updateAuction(offer);
       }
     }
   }
 
-  protected updateAuction() {
+  protected updateAuction(value: any) {
     let body = {
       final_cost: this.auction.initial_cost
     };
-    if (this.offers.length > 0) {
-      body.final_cost = this.offers[0].cost;
+    if (value.length > 0) {
+      body.final_cost = value[0].cost;
     }
     this.aucService.updateAuction(body, this.auction_id).subscribe();
   }
