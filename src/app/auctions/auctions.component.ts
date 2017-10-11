@@ -17,7 +17,7 @@ export class AuctionsComponent implements OnInit {
   public p;
   @ViewChild('addModal') public addModal: ModalDirective;
   public user;
-  constructor(public aucService: AuctionsService, private vcr: ViewContainerRef, private uService: UserService, protected echo: LaravelEchoService,) {
+  constructor(public aucService: AuctionsService, private vcr: ViewContainerRef, private uService: UserService, protected echo: LaravelEchoService) {
     this.aucService.toastr.setRootViewContainerRef( this.vcr);
     this.user = JSON.parse(sessionStorage.getItem('curUser'));
   }
@@ -42,7 +42,6 @@ export class AuctionsComponent implements OnInit {
       }
     });
   }
-
 
   public check;
   public getPreffered(event) {

@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, ViewContainerRef
+  Component, OnDestroy, OnInit, ViewContainerRef
 } from '@angular/core';
 import {AuctionsService} from '../shared/auctions.service';
 import {NgForm} from '@angular/forms';
@@ -9,13 +9,14 @@ import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {Location} from '@angular/common';
 import {UserService} from "../../user/user.service";
+import {LaravelEchoService} from "../../core/laravel-echo.service";
 
 @Component({
   selector: 'auctions-show',
   templateUrl: './auctions-show.component.html'
 })
 
-export class AuctionsShowComponent implements OnInit {
+export class AuctionsShowComponent implements OnInit, OnDestroy {
   protected moment = moment;
   private sub: any;
   public auction;
@@ -30,16 +31,21 @@ export class AuctionsShowComponent implements OnInit {
   private user;
   public bookmark = [];
   public clicked = false;
-  constructor(private aucService: AuctionsService, private route: ActivatedRoute, private vcr: ViewContainerRef, private location: Location, private uService: UserService) {
+  constructor(private aucService: AuctionsService, private route: ActivatedRoute, private vcr: ViewContainerRef, private location: Location, private uService: UserService, protected echo: LaravelEchoService) {
     this.aucService.toastr.setRootViewContainerRef(this.vcr);
     this.user = JSON.parse(sessionStorage.getItem('curUser'));
   }
 
   ngOnInit() {
     this.showAuction();
-    this.getOffers();
     this.searchTeams();
     this.aucService.onFetchData().subscribe(() => this.getOffers());
+    this.connectBroadcast();
+    this.echo.subscribeToEcho();
+  }
+
+  ngOnDestroy() {
+    this.aucService.echoSub.leave('offers');
   }
 
   protected showAuction() {
@@ -49,22 +55,21 @@ export class AuctionsShowComponent implements OnInit {
         this.aucService.showAuction(this.auction_id).subscribe(
           (data) => {
             this.auction = data;
+            this.aucService.getOffersByAuction(this.auction_id).subscribe(
+              (data) => {
+                this.offers = data;
+                this.timer(this.offers);
+              });
           });
       }
     );
   }
 
   protected getOffers() {
-    if (this.auction_id !== 0) {
-      this.aucService.getOffersByAuction(this.auction_id).subscribe(
-        (data) => {
-          this.offers = data;
-          this.timer();
-          if (this.auction && this.auction.final_cost === 0) {
-            this.updateAuction();
-          }
-        });
-    }
+    this.aucService.getOffersByAuction(this.auction_id).subscribe(
+      (data) => {
+        this.offers = data;
+      });
   }
 
   protected save(form: NgForm) {
@@ -134,17 +139,19 @@ export class AuctionsShowComponent implements OnInit {
   }
 
   private finishTime;
-  protected timer() {
-    if (this.offers.length > 0) {
-      this.finishTime = moment(this.offers[0].created_at).add(20, 'm');
-    } else {
-      this.finishTime = moment(this.auction['created_at']).add(20, 'm');
+  protected timer(offer: any) {
+    console.log(offer[0]);
+    this.finishTime =   moment(this.auction['created_at']).add(20, 'm');
+    if (offer.length > 0) {
+      this.finishTime = moment(offer[0].created_at).add(20, 'm');
     }
+
+    console.log(moment(this.finishTime).format('HH:mm'));
 
     if (moment() > this.finishTime) {
       this.alert.type = 'time-is-over';
-      if (this.offers.length > 0) {
-        this.alert.text = this.auction.player['title'] + ' переходит в ' + this.offers[0].team.title + ' за ' + this.offers[0].cost + ' млн.';
+      if (offer.length > 0) {
+        this.alert.text = this.auction.player['title'] + ' переходит в ' + offer[0].team.title + ' за ' + offer[0].cost + ' млн.';
       } else {
         this.alert.text = this.auction.player['title'] + ' переходит в ' + this.auction.team.title + ' за ' + this.auction.initial_cost + ' млн.';
       }
@@ -160,7 +167,20 @@ export class AuctionsShowComponent implements OnInit {
     }
     this.aucService.updateAuction(body, this.auction_id).subscribe();
   }
+
   goBack() {
     this.location.back();
+  }
+
+  protected connectBroadcast() {
+    this.echo.echo.subscribe((echo) => {
+      if (echo) {
+        echo.channel('offers')
+          .listen('.offer', (e) => {
+            this.getOffers();
+            console.log(e);
+          });
+      }
+    });
   }
 }
