@@ -178,7 +178,6 @@ export class AuctionsShowComponent implements OnInit, OnDestroy {
         echo.channel('offers')
           .listen('.offer', (e) => {
             this.getOffers();
-            console.log(e);
           });
       }
     });
