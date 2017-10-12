@@ -38,7 +38,14 @@ export class AuctionsAllComponent implements OnInit, OnDestroy {
       .listen('.offer', (data) => {
 
         console.log(data);
-        this.notification.sendNotification('Alert', {body: 'Тестирование HTML5 Notifications',icon: 'http://abay.dev.kerimov.kz/public/img/180px-Krysakun_cover2.jpg'});
+        this.aucService.showAuction(data.offer.auction_id).subscribe(value => {
+          if (value.user_id !== data.offer.user_id) {
+            this.notification.sendNotification('На ваш аукцион напали!', {
+              body: data.offer.auction_title.replace(/<\/?[^>]+(>|$)/g, ""),
+              icon: 'http://abay.dev.kerimov.kz/public/img/180px-Krysakun_cover2.jpg',
+            }, data.offer.auction_id);
+          }
+        });
       });
   }
   ngOnDestroy() {

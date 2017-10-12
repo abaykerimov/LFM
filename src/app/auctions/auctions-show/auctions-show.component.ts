@@ -4,12 +4,13 @@ import {
 import {AuctionsService} from '../shared/auctions.service';
 import {NgForm} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
-import * as moment from 'moment';
+import * as moments from 'moment';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {Location} from '@angular/common';
 import {UserService} from "../../user/user.service";
 import {LaravelEchoService} from "../../core/laravel-echo.service";
+import moment from "moment-timezone";
 
 @Component({
   selector: 'auctions-show',
@@ -76,6 +77,7 @@ export class AuctionsShowComponent implements OnInit, OnDestroy {
     form.value.auction_id = this.auction_id;
     form.value.team_id = this.team.id;
     form.value.user_id = this.user['user_id'];
+    form.value.auction_title = this.auction.title;
     if (this.alert.type === 'success') {
       this.aucService.addOffer(form.value).subscribe((data) => {
           this.aucService.flash('Ставка сделана!', 'success');
@@ -140,15 +142,15 @@ export class AuctionsShowComponent implements OnInit, OnDestroy {
 
   private finishTime;
   protected timer(offer: any) {
-    console.log(offer[0]);
+    // console.log(offer[0]);
     this.finishTime =   moment(this.auction['created_at']).add(20, 'm');
     if (offer.length > 0) {
       this.finishTime = moment(offer[0].created_at).add(20, 'm');
     }
-
+    console.log(moment().tz("Asia/Almaty").format('HH:mm'));
     console.log(moment(this.finishTime).format('HH:mm'));
 
-    if (moment() > this.finishTime) {
+    if (moment().tz("Asia/Almaty") > this.finishTime) {
       this.alert.type = 'time-is-over';
       if (offer.length > 0) {
         this.alert.text = this.auction.player['title'] + ' переходит в ' + offer[0].team.title + ' за ' + offer[0].cost + ' млн.';
