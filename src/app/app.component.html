@@ -13,8 +13,10 @@
         <li class="active"><a href="/">Главная</a></li>
         <li><a href="/auctions">Аукционы</a></li>
         <li><a href="/auctions/calculator?type=cost">Цены на игроков</a></li>
+
+        <li><a href="javascript:void(0);"><span class="glyphicon glyphicon-envelope" (click)="openModal()"></span></a></li>
+        <!--<ul class="nav navbar-nav navbar-right">-->
       </ul>
-      <!--<ul class="nav navbar-nav navbar-right">-->
         <!--<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>-->
         <!--<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
       <!--</ul>-->
@@ -28,3 +30,42 @@
 <ng-template #content>
   <p class="text-center">Auth key failed</p>
 </ng-template>
+<div bsModal #envelope="bs-modal" id="envelope" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="addReplyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title pull-left">Напишите проблему или баг</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="envelope.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #form="ngForm" (ngSubmit)="submit(form)" class="form-horizontal">
+          <fieldset>
+
+            <div class="form-group">
+              <label for="bug" class="col-lg-2 control-label">Баг или проблема</label>
+              <div class="col-lg-10 value">
+                <textarea name="problem" class="form-control" id="bug" ngModel required></textarea>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="wishes" class="col-lg-2 control-label">Пожелания?</label>
+              <div class="col-lg-10 value">
+                <textarea name="wish" class="form-control" id="wishes" ngModel></textarea>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-lg-6 col-lg-offset-2 submit">
+                <button type="submit" class="btn btn-success" style="width: 100%;" [disabled]="!form.valid">Послать ворона</button>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

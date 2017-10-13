@@ -1,7 +1,6 @@
 <div class="container">
   <auctions-assign class="pull-right" *ngIf="user['viewer_type'] === '4'"></auctions-assign>
-
-  <button class="btn btn-success" (click)="openModal()" *ngIf="moment(aucService.option.starts) < moment()">Создать аукцион</button><br>
+  <button class="btn btn-success" (click)="openModal()" *ngIf="moment.utc(aucService.option.starts).local() < moment()">Создать аукцион</button><br>
   <!--<button class="btn btn-default btn-sm" style="margin-top: 10px;" (click)="getAuctions()"><i class="glyphicon glyphicon-refresh" style="margin-left: 5px;"></i></button>-->
   <label class="label pull-right bookmark">Избранные<input type="checkbox" class="checkbox-inline" (change)="getPreffered($event)"></label>
 </div>

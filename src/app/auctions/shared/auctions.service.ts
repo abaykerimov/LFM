@@ -174,6 +174,11 @@ export class AuctionsService {
     return this.http.get(path).map(this.extractData).debounce(() => Observable.timer(500));
   }
 
+  public updatePlayer(body: any, id) {
+    const params = JSON.stringify(body);
+    return this.http.put(this.url + 'players/' + id, params, { headers: this.headers }).map(this.extractData);
+  }
+
   public getTeams(title: string = '') {
     let path = this.url + 'teams';
     if (title !== '') {
@@ -181,6 +186,11 @@ export class AuctionsService {
     }
     console.log(path);
     return this.http.get(path).map(this.extractData).debounce(() => Observable.timer(500));
+  }
+
+  public addReply(body: any) {
+    const params = JSON.stringify(body);
+    return this.http.post(this.url + 'reply', params, { headers: this.headers }).map(this.extractData);
   }
 
   public resetParams() {

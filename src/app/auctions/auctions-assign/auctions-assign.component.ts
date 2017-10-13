@@ -32,7 +32,7 @@ export class AuctionsAssignComponent implements OnInit {
   }
 
   public save(form: NgForm) {
-    form.value.started_at = moment(this.date).format('YYYY-MM-DD HH:mm:ss');
+    form.value.started_at = moment.utc(this.date).format('YYYY-MM-DD HH:mm:ss');
     form.value.user_id = this.user['user_id'];
     this.modal.hide();
     this.aucService.addOption(form.value).subscribe((data) => {

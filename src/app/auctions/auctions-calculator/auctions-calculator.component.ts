@@ -59,7 +59,6 @@ export class AuctionsCalculatorComponent implements OnInit {
   submit(form: NgForm) {
     if (this.param) {
       form.value.auctions_option_id = this.aucService.option.id;
-      form.value.title = this.player.title;
       form.value.description = 'Из ' + this.player.team + ' в ' + this.team.title + ' за ' + this.player.cost + ' млн.';
       form.value.player_id = this.player.id;
       form.value.team_id = this.team.id;
@@ -90,7 +89,7 @@ export class AuctionsCalculatorComponent implements OnInit {
       let arr = [];
       if (data.length > 0) {
         data.forEach((item) => {
-          arr.push({id: item.id, text: `<a class="select-items" href=https://sofifa.com/player/${item.id} target="_blank">${item.title}</a>`, position: item.position, skill: item.skill, date_of_birth: item.date_of_birth, team: item.team.title});
+          arr.push({id: item.id, text: item.title, position: item.position, skill: item.skill, date_of_birth: item.date_of_birth, team: item.team.title});
         });
       }
       this.player.all = arr;

@@ -11,6 +11,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {UserService} from "./user/user.service";
 import * as $ from 'jquery';
 import {CoreModule} from "./core/core.module";
+import {AlertModule, ModalModule} from "ngx-bootstrap";
 
 @NgModule({
   imports: [
@@ -21,7 +22,9 @@ import {CoreModule} from "./core/core.module";
     JsonpModule,
     AuctionsModule,
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
-    CoreModule
+    CoreModule,
+    ModalModule.forRoot(),
+    AlertModule.forRoot(),
   ],
   declarations: [
     AppComponent,

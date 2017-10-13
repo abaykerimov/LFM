@@ -5,7 +5,7 @@
     <div class="panel-heading">
       <img src="{{auction.player['avatar']}}" class="img-responsive avatar" style="margin-top: -96px;">
       <div class="auction-info">
-        <p><i class="glyphicon glyphicon-user"></i>{{auction.player['title']}}</p>
+        <p><i class="glyphicon glyphicon-user"></i><a href="https://sofifa.com/player/{{auction.player['id']}}?v=18&e=158855&set=true" target="_blank">{{auction.player['title']}}</a></p>
         <p><i class="glyphicon glyphicon glyphicon-knight"></i>{{auction.player['position']}}</p>
         <p><i class="glyphicon glyphicon glyphicon-signal"></i>{{auction.player['skill']}}</p>
         <p><i class="glyphicon glyphicon glyphicon-flash"></i>{{moment(auction.player['date_of_birth']).format('DD.MM.YYYY')}}</p>
@@ -13,6 +13,7 @@
     </div>
     <div class="panel-body">
       {{auction['description']}}
+      <span class="pull-right">{{moment.utc(auction['created_at']).local().format('HH:mm')}}</span>
     </div>
   </div>
 
@@ -49,7 +50,7 @@
   <!--<button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="getOffers()"><i class="glyphicon glyphicon-refresh" style="margin-left: 5px;"></i></button>-->
 
   <blockquote *ngFor="let offer of offers">
-    <p>{{offer.team.title + ', ' + offer.cost + ' млн.' }} <span style="float: right; font-size: 12px;" [innerHTML]="moment(offer.created_at, 'YYYY-MM-DD HH:mm:ss').format('HH:mm DD.MM.YYYY')"></span></p>
+    <p>{{offer.team.title + ', ' + offer.cost + ' млн.' }} <span style="float: right; font-size: 12px;" [innerHTML]="moment.utc(offer.created_at, 'YYYY-MM-DD HH:mm:ss').local().format('HH:mm DD.MM.YYYY')"></span></p>
     <small><a href="https://vk.com/id{{offer.user_id}}" target="_blank">{{offer.user.first_name + ' ' + offer.user.last_name}}</a> </small>
   </blockquote>
 

@@ -308,6 +308,6 @@ auctions label.bookmark .checkbox-inline {
   margin-left: 5px;
 }
 
-auctions #addModal {
+auctions #addModal, #envelope {
   z-index: 9999999;
 }

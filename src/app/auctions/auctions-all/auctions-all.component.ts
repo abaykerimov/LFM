@@ -50,6 +50,14 @@ export class AuctionsAllComponent implements OnInit, OnDestroy {
         });
       });
   }
+
+  public auction_id;
+  public auctionExpiredBroadcast() {
+    this.aucService.echoSub.channel('expired')
+      .listen('.expire', (e) => {
+        this.auction_id = e.auction.id;
+      });
+  }
   ngOnDestroy() {
     this.aucService.echoSub.leave('auctions');
   }
