@@ -113,7 +113,6 @@ export class AuctionsService {
     return this.http.get(this.url + 'offer/' + id).map(this.extractData);
   }
   public showAuction(id: any) {
-    console.log(this.url + 'auction/' + id);
     return this.http.get(this.url + 'auction/' + id).map(this.extractData);
   }
 
@@ -184,7 +183,6 @@ export class AuctionsService {
     if (title !== '') {
       path = path + '?search=' + title;
     }
-    console.log(path);
     return this.http.get(path).map(this.extractData).debounce(() => Observable.timer(500));
   }
 

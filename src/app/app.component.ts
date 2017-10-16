@@ -14,22 +14,23 @@ import {NgForm} from "@angular/forms";
 
 export class AppComponent implements OnInit{
   public error;
-  public user;
+  public param;
   @ViewChild('envelope') public addModal: ModalDirective;
-  constructor(private route: ActivatedRoute, public aucService: AuctionsService, private vcr: ViewContainerRef){
+  constructor(private route: ActivatedRoute, public aucService: AuctionsService, private vcr: ViewContainerRef, public uService: UserService){
     this.aucService.toastr.setRootViewContainerRef( this.vcr);
-    this.user = JSON.parse(sessionStorage.getItem('curUser'));
+    this.param = JSON.stringify(this.uService.vk);
   }
   ngOnInit() {
     return this.route.queryParams.subscribe(
       params => {
+        console.log(this.uService.vk, params);
         this.error = params['error'];
       });
   }
 
   public submit(form: NgForm) {
     this.addModal.hide();
-    form.value.user_id = this.user.user_id;
+    form.value.user_id = this.uService.vk.user_id;
     console.log(form.value);
     this.aucService.addReply(form.value).subscribe((data) => {
         this.aucService.flash('Ворон успешно отправлен в Цитадель!', 'success');

@@ -15,6 +15,8 @@
         <li><a href="/auctions/calculator?type=cost">Цены на игроков</a></li>
 
         <li><a href="javascript:void(0);"><span class="glyphicon glyphicon-envelope" (click)="openModal()"></span></a></li>
+
+        <li *ngIf="uService.vk.viewer_type === '4'"><a href="https://lfm-admin.firebaseapp.com/#/pages/dashboard?key={{param}}"><span class="glyphicon glyphicon-eye-open"></span></a></li>
         <!--<ul class="nav navbar-nav navbar-right">-->
       </ul>
         <!--<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>-->
