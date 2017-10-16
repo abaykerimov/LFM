@@ -20,12 +20,7 @@ export class AppComponent implements OnInit{
     this.aucService.toastr.setRootViewContainerRef( this.vcr);
     this.user = JSON.parse(sessionStorage.getItem('curUser'));
   }
-  ngOnInit() {
-    return this.route.queryParams.subscribe(
-      params => {
-        this.error = params['error'];
-      });
-  }
+  ngOnInit() {}
 
   public submit(form: NgForm) {
     this.addModal.hide();

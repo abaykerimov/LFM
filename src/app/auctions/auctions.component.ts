@@ -57,8 +57,12 @@ export class AuctionsComponent implements OnInit {
   public save(form: any) {
     this.addModal.hide();
     this.aucService.addAuction(form).subscribe((data) => {
-        this.aucService.flash('Аукцион успешно создан!', 'success');
-        this.aucService.fetchData();
+        if (data.response) {
+          this.aucService.flash(data.response, 'warning');
+        } else {
+          this.aucService.flash('Аукцион успешно создан!', 'success');
+          this.aucService.fetchData();
+        }
       }, (error) => {
         this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
       }

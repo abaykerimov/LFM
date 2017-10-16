@@ -132,7 +132,7 @@ export class AuctionsShowComponent implements OnInit, OnDestroy {
     } else {
       temp = this.offers[0].cost;
     }
-    if (event < temp) {
+    if (event < temp || event === temp) {
       this.alert.type = 'cost-error';
     } else {
       this.alert.type = 'success';
