@@ -18,7 +18,9 @@ import {Location} from '@angular/common';
 
 export class AuctionsCalculatorComponent implements OnInit {
 
+  private user;
   constructor(protected aucService: AuctionsService, private uService: UserService, private route: ActivatedRoute, private location: Location) {
+    this.user = JSON.parse(sessionStorage.getItem('curUser'));
   }
   private searchTerms = new Subject<string>();
   public player = {
@@ -61,7 +63,7 @@ export class AuctionsCalculatorComponent implements OnInit {
       form.value.player_id = this.player.id;
       form.value.team_id = this.team.id;
       form.value.initial_cost = this.player.cost;
-      form.value.user_id = this.uService.vk['user_id'];
+      form.value.user_id = this.user['user_id'];
       this.onSubmit.emit(form.value);
       form.reset();
       this.player.id = 0;

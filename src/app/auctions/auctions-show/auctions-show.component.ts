@@ -29,9 +29,11 @@ export class AuctionsShowComponent implements OnInit, OnDestroy {
     title: ''
   };
   private searchTerms = new Subject<string>();
+  private user;
   public bookmark = [];
   constructor(private aucService: AuctionsService, private route: ActivatedRoute, private vcr: ViewContainerRef, private location: Location, private uService: UserService, protected echo: LaravelEchoService) {
     this.aucService.toastr.setRootViewContainerRef(this.vcr);
+    this.user = JSON.parse(sessionStorage.getItem('curUser'));
   }
 
   ngOnInit() {
@@ -73,7 +75,7 @@ export class AuctionsShowComponent implements OnInit, OnDestroy {
   protected save(form: NgForm) {
     form.value.auction_id = this.auction_id;
     form.value.team_id = this.team.id;
-    form.value.user_id = this.uService.vk.user_id;
+    form.value.user_id = this.user['user_id'];
     form.value.auction_title = this.auction.player.title;
     if (this.alert.type === 'success') {
       this.aucService.addOffer(form.value).subscribe((data) => {
