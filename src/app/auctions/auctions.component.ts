@@ -4,7 +4,7 @@ import {
 import {AuctionsService} from './shared/auctions.service';
 import {ModalDirective} from 'ngx-bootstrap';
 import * as moment from 'moment';
-import {UserService} from "../user/user.service";
+import {UserService} from "../core/user.service";
 import {LaravelEchoService} from "../core/laravel-echo.service";
 
 @Component({

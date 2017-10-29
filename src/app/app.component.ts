@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Md5} from "ts-md5/dist/md5";
-import {UserService} from "./user/user.service";
+import {UserService} from "./core/user.service";
 import {ModalDirective} from 'ngx-bootstrap';
 import {AuctionsService} from "./auctions/shared/auctions.service";
 import {NgForm} from "@angular/forms";
@@ -18,13 +18,13 @@ export class AppComponent implements OnInit{
   @ViewChild('envelope') public addModal: ModalDirective;
   constructor(private route: ActivatedRoute, public aucService: AuctionsService, private vcr: ViewContainerRef){
     this.aucService.toastr.setRootViewContainerRef( this.vcr);
-    this.user = JSON.parse(sessionStorage.getItem('curUser'));
+    this.user = sessionStorage.getItem('curUser');
   }
   ngOnInit() {}
 
   public submit(form: NgForm) {
     this.addModal.hide();
-    form.value.user_id = this.user.user_id;
+    form.value.user_id = JSON.parse(this.user).user_id;
     console.log(form.value);
     this.aucService.addReply(form.value).subscribe((data) => {
         this.aucService.flash('Ворон успешно отправлен в Цитадель!', 'success');
