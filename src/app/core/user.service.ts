@@ -1,4 +1,4 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Headers, Http, URLSearchParams, Response, Jsonp} from '@angular/http';
 
 import 'rxjs/add/operator/map';
@@ -10,7 +10,7 @@ import {env} from "../../.env";
 import {Md5} from "ts-md5/dist/md5";
 
 @Injectable()
-export class UserService implements OnInit{
+export class UserService {
   public headers: Headers = new Headers({ 'Content-Type': 'application/json;charset=utf-8' });
   private url;
 
@@ -28,17 +28,12 @@ export class UserService implements OnInit{
 
   constructor(private http: Http, private route: ActivatedRoute, private jsonp: Jsonp, private router: Router) {
     this.url = env('apiUrl');
-
-  }
-
-  ngOnInit() {
     this.getUserData();
   }
+
   public getUserData() {
     this.route.queryParams.subscribe(
       params => {
-        console.log(Object.keys(params).length);
-        console.log(params);
         if (!params['type']) {
           if (Object.keys(params).length !== 0) {
             console.log(params);
@@ -50,22 +45,21 @@ export class UserService implements OnInit{
 
             sessionStorage.setItem('curUser', JSON.stringify(this.vk));
           } else {
-            console.log('params not set');
             this.vk = JSON.parse(sessionStorage.getItem('curUser'));
           }
         } else {
           this.vk = JSON.parse(sessionStorage.getItem('curUser'));
         }
 
-        this.getUser(this.vk).subscribe(data => {
-          if (Object.keys(data).length === 0) {
-            this.user = JSON.parse(this.vk.api_result);
-            console.log(this.user.response);
-            this.addUserToDB(this.user.response[0]);
-          } else {
-            this.user = data;
-          }
-        });
+        // this.getUser(this.vk).subscribe(data => {
+        //   if (Object.keys(data).length === 0) {
+        //     this.user = JSON.parse(this.vk.api_result);
+        //     console.log(this.user.response);
+        //     this.addUserToDB(this.user.response[0]);
+        //   } else {
+        //     this.user = data;
+        //   }
+        // });
         // this.checkUser(this.vk);
       });
   }
