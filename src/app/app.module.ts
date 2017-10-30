@@ -30,7 +30,7 @@ import {AlertModule, ModalModule} from "ngx-bootstrap";
     AppComponent,
   ],
   bootstrap: [AppComponent],
-  providers: [UserService]
+  providers: []
 })
 export class AppModule {
 }

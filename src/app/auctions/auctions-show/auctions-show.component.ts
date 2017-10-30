@@ -8,7 +8,7 @@ import * as moments from 'moment';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {Location} from '@angular/common';
-import {UserService} from "../../user/user.service";
+import {UserService} from "../../core/user.service";
 import {LaravelEchoService} from "../../core/laravel-echo.service";
 import moment from "moment-timezone";
 

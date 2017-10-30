@@ -1,10 +1,10 @@
 import {
-  Component, OnDestroy, OnInit, ViewChild, ViewContainerRef
+  Component, OnChanges, OnDestroy, OnInit, ViewChild, ViewContainerRef
 } from '@angular/core';
 import {AuctionsService} from './shared/auctions.service';
 import {ModalDirective} from 'ngx-bootstrap';
 import * as moment from 'moment';
-import {UserService} from "../user/user.service";
+import {UserService} from "../core/user.service";
 import {LaravelEchoService} from "../core/laravel-echo.service";
 
 @Component({
@@ -12,14 +12,15 @@ import {LaravelEchoService} from "../core/laravel-echo.service";
   templateUrl: './auctions.component.html'
 })
 
-export class AuctionsComponent implements OnInit {
+export class AuctionsComponent implements OnInit, OnChanges {
 
   public p;
   @ViewChild('addModal') public addModal: ModalDirective;
   public user;
   constructor(public aucService: AuctionsService, private vcr: ViewContainerRef, private uService: UserService, protected echo: LaravelEchoService) {
     this.aucService.toastr.setRootViewContainerRef( this.vcr);
-    this.user = JSON.parse(sessionStorage.getItem('curUser'));
+    this.user = uService.vk;
+    // this.user = JSON.parse(sessionStorage.getItem('curUser'));
   }
   public data = [];
   public moment = moment;
@@ -30,6 +31,11 @@ export class AuctionsComponent implements OnInit {
 
     this.connectBroadcast();
     this.echo.subscribeToEcho();
+    console.log(this.uService.vk);
+  }
+
+  ngOnChanges() {
+    console.log(this.uService.vk);
   }
 
   protected connectBroadcast() {

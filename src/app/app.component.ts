@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
 import {Md5} from "ts-md5/dist/md5";
-import {UserService} from "./user/user.service";
+import {UserService} from "./core/user.service";
 import {ModalDirective} from 'ngx-bootstrap';
 import {AuctionsService} from "./auctions/shared/auctions.service";
 import {NgForm} from "@angular/forms";
@@ -13,14 +12,15 @@ import {NgForm} from "@angular/forms";
 })
 
 export class AppComponent implements OnInit{
-  public error;
   public user;
   @ViewChild('envelope') public addModal: ModalDirective;
-  constructor(private route: ActivatedRoute, public aucService: AuctionsService, private vcr: ViewContainerRef){
+  constructor(public aucService: AuctionsService, private vcr: ViewContainerRef, public uService: UserService){
     this.aucService.toastr.setRootViewContainerRef( this.vcr);
     this.user = JSON.parse(sessionStorage.getItem('curUser'));
+    console.log(uService.vk);
   }
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   public submit(form: NgForm) {
     this.addModal.hide();
