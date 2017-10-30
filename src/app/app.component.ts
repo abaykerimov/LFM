@@ -15,20 +15,12 @@ import {NgForm} from "@angular/forms";
 export class AppComponent implements OnInit{
   public error;
   public user;
-  public param;
   @ViewChild('envelope') public addModal: ModalDirective;
   constructor(private route: ActivatedRoute, public aucService: AuctionsService, private vcr: ViewContainerRef){
     this.aucService.toastr.setRootViewContainerRef( this.vcr);
     this.user = JSON.parse(sessionStorage.getItem('curUser'));
-    this.param = JSON.stringify(this.user);
   }
-  ngOnInit() {
-    return this.route.queryParams.subscribe(
-      params => {
-        console.log(this.user);
-        this.error = params['error'];
-      });
-  }
+  ngOnInit() {}
 
   public submit(form: NgForm) {
     this.addModal.hide();

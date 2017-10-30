@@ -9,9 +9,9 @@ export class NotificationService {
   constructor() {}
 
   public sendNotification(title, options, auction_id) {
-    if (!("Notification" in window)) {
-      alert('Ваш браузер не поддерживает HTML Notifications, его необходимо обновить.');
-    }
+    // if (!("Notification" in window)) {
+    //   alert('Ваш браузер не поддерживает HTML Notifications, его необходимо обновить.');
+    // }
 
     Notification.requestPermission(permission => {
       if (permission === "granted") {
