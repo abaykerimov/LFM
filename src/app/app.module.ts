@@ -8,8 +8,11 @@ import {AppComponent} from './app.component';
 import {AuctionsModule} from './auctions/auctions.module';
 import {PreloadAllModules, RouterModule} from '@angular/router';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {UserService} from "./user/user.service";
+import {UserService} from "./core/user.service";
 import * as $ from 'jquery';
+import {CoreModule} from "./core/core.module";
+import {AlertModule, ModalModule} from "ngx-bootstrap";
+import {TeamModule} from "./team/team.module";
 
 @NgModule({
   imports: [
@@ -19,13 +22,17 @@ import * as $ from 'jquery';
     HttpModule,
     JsonpModule,
     AuctionsModule,
+    TeamModule,
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
+    CoreModule,
+    ModalModule.forRoot(),
+    AlertModule.forRoot(),
   ],
   declarations: [
     AppComponent,
   ],
   bootstrap: [AppComponent],
-  providers: [UserService]
+  providers: []
 })
 export class AppModule {
 }

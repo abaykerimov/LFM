@@ -1,7 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Md5} from "ts-md5/dist/md5";
-import {UserService} from "./user/user.service";
+import {UserService} from "./core/user.service";
+import {ModalDirective} from 'ngx-bootstrap';
+import {AuctionsService} from "./auctions/shared/auctions.service";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app',
@@ -11,11 +14,27 @@ import {UserService} from "./user/user.service";
 
 export class AppComponent implements OnInit{
   public error;
-  constructor(private route: ActivatedRoute){}
-  ngOnInit() {
-    return this.route.queryParams.subscribe(
-      params => {
-        this.error = params['error'];
-      });
+  public user;
+  @ViewChild('envelope') public addModal: ModalDirective;
+  constructor(private route: ActivatedRoute, public aucService: AuctionsService, private vcr: ViewContainerRef){
+    this.aucService.toastr.setRootViewContainerRef( this.vcr);
+    this.user = sessionStorage.getItem('curUser');
+  }
+  ngOnInit() {}
+
+  public submit(form: NgForm) {
+    this.addModal.hide();
+    form.value.user_id = JSON.parse(this.user).user_id;
+    this.aucService.addReply(form.value).subscribe((data) => {
+        this.aucService.flash('Ворон успешно отправлен в Цитадель!', 'success');
+      }, (error) => {
+        this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
+      }
+    );
+    form.reset();
+  }
+
+  public openModal() {
+    this.addModal.show();
   }
 }

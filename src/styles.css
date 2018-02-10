@@ -150,7 +150,7 @@ auctions-bookmark .players-list.red {
     width: 76% !important;
   }
   auctions-show .auction-info {
-    width: 71% !important;
+    width: 65% !important;
   }
 }
 
@@ -160,6 +160,13 @@ auctions-bookmark .players-list.red {
     width: 70% !important;
   }
 }
+
+@media (max-width: 379px) {
+  auctions-show .auction-info {
+    width: 65% !important;
+  }
+}
+
 
 @media (max-width: 992px) {
   auctions .form-group .info {
@@ -301,6 +308,6 @@ auctions label.bookmark .checkbox-inline {
   margin-left: 5px;
 }
 
-auctions #addModal {
+auctions #addModal, #envelope {
   z-index: 9999999;
 }

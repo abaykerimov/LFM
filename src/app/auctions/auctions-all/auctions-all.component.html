@@ -2,10 +2,10 @@
   <div class="list-group" *ngFor="let auction of data | paginate: { itemsPerPage: 7, currentPage: p }">
     <auctions-bookmark-set [user_id]="user.user_id" [auction_id]="auction.id"></auctions-bookmark-set>
 
-    <a [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
-      <img class="img-responsive avatar" src="{{auction.player['avatar']}}">
+    <a [ngClass]="auction.final_cost !== 0 ? '#e4e4e4' : ''" [routerLink]="['/auctions/detail/'+auction.id]" class="list-group-item players-list">
+      <img class="img-responsive avatar" src="{{auction.player['avatar']}}" onError="this.src='https://cdn.sofifa.org/player.png'">
       <div class="auction-info">
-        <p class="list-group-item-heading" [innerHTML]="auction.title"></p>
+        <p class="list-group-item-heading"><a href="https://sofifa.com/player/{{auction.player.player_id}}?v=18&e=158991&set=true" target="_blank">{{auction.player.title}}</a></p>
         <p class="list-group-item-text description"><i class="glyphicon glyphicon-info-sign"></i>{{auction.description}}
         </p>
         <div style="margin-top: 10px;">

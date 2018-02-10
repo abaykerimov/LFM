@@ -1,10 +1,11 @@
 import {
-  Component, OnInit, ViewChild, ViewContainerRef
+  Component, OnChanges, OnDestroy, OnInit, ViewChild, ViewContainerRef
 } from '@angular/core';
 import {AuctionsService} from './shared/auctions.service';
 import {ModalDirective} from 'ngx-bootstrap';
 import * as moment from 'moment';
-import {UserService} from "../user/user.service";
+import {UserService} from "../core/user.service";
+import {LaravelEchoService} from "../core/laravel-echo.service";
 
 @Component({
   selector: 'auctions',
@@ -16,8 +17,9 @@ export class AuctionsComponent implements OnInit {
   public p;
   @ViewChild('addModal') public addModal: ModalDirective;
   public user;
-  constructor(public aucService: AuctionsService, private vcr: ViewContainerRef, private uService: UserService) {
+  constructor(public aucService: AuctionsService, private vcr: ViewContainerRef, private uService: UserService, protected echo: LaravelEchoService) {
     this.aucService.toastr.setRootViewContainerRef( this.vcr);
+    // this.user = uService.vk;
     this.user = JSON.parse(sessionStorage.getItem('curUser'));
   }
   public data = [];
@@ -26,6 +28,20 @@ export class AuctionsComponent implements OnInit {
   ngOnInit() {
     this.getAuctions();
     this.aucService.onFetchData().subscribe(() => this.getAuctions());
+
+    this.connectBroadcast();
+    this.echo.subscribeToEcho();
+  }
+
+  protected connectBroadcast() {
+    this.echo.echo.subscribe((echo) => {
+      if (echo) {
+        echo.channel('auctions')
+          .listen('.auction', (e) => {
+            console.log(e);
+          });
+      }
+    });
   }
 
   public check;
@@ -40,10 +56,14 @@ export class AuctionsComponent implements OnInit {
   }
 
   public save(form: any) {
+    this.addModal.hide();
     this.aucService.addAuction(form).subscribe((data) => {
-        this.addModal.hide();
-        this.aucService.flash('Аукцион успешно создан!', 'success');
-        this.aucService.fetchData();
+        if (data.response) {
+          this.aucService.flash(data.response, 'warning');
+        } else {
+          this.aucService.flash('Аукцион успешно создан!', 'success');
+          this.aucService.fetchData();
+        }
       }, (error) => {
         this.aucService.flash('Произошла ошибка, попробуйте еще раз!', 'error');
       }

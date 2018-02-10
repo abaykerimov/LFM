@@ -4,7 +4,7 @@
     <a [ngClass]="auction.auction[0].offers.length > 0 && auction.auction[0].offers[0].user_id !== user.user_id ? 'red' : ''" [routerLink]="['/auctions/detail/'+auction.auction[0].id]" class="list-group-item players-list">
       <img class="img-responsive avatar" src="{{auction.auction[0].player.avatar}}">
       <div class="auction-info">
-        <p class="list-group-item-heading" [innerHTML]="auction.auction[0].title"></p>
+        <p class="list-group-item-heading player-title"><a href="https://sofifa.com/player/{{auction.auction[0].player.id}}?v=18&e=158855&set=true" target="_blank">{{auction.auction[0].player.title}}</a></p>
         <p class="list-group-item-text description"><i class="glyphicon glyphicon-info-sign"></i>{{auction.auction[0].description}}
         </p>
         <div style="margin-top: 10px;">

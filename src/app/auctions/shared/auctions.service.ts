@@ -8,6 +8,7 @@ import {Subject} from 'rxjs/Subject';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import {ActivatedRoute, Router} from '@angular/router';
 import {env} from "../../../.env";
+import {LaravelEchoService} from "../../core/laravel-echo.service"
 
 @Injectable()
 export class AuctionsService {
@@ -18,13 +19,17 @@ export class AuctionsService {
     year: 0,
     starts: ''
   };
+  public tournament;
   public paramsString = '';
   private url;
   private stateParams = {};
 
   private updateData = new Subject<boolean>();
+  public echoSub;
 
-  constructor(private http: Http, public toastr: ToastsManager) {
+  constructor(private http: Http, public toastr: ToastsManager, protected echo: LaravelEchoService) {
+    this.connectBroadcast();
+
     this.url = env('apiUrl');
     this.resetParams();
     this.getOption().subscribe(data => {
@@ -32,9 +37,21 @@ export class AuctionsService {
       this.option.year = data.turnir_year;
       this.option.starts = data.started_at;
     });
+    this.getTournament().subscribe(data => {
+      this.tournament = data.id;
+    });
     /*
     * ГЛОБАЛЬНАЯ ПЕРЕМЕННАЯ - ГОД И АУКЦИОН_OPTIONS_ID
     **/
+  }
+
+  protected connectBroadcast() {
+    this.echo.echo.subscribe((echo) => {
+      if (echo) {
+        console.log(echo);
+        this.echoSub = echo;
+      }
+    });
   }
 
   public fetchData() {
@@ -88,6 +105,9 @@ export class AuctionsService {
   }
   public getOption() {
     return this.http.get(this.url + 'option').map(this.extractData);
+  }
+  public getTournament() {
+    return this.http.get(this.url + 'tournament').map(this.extractData);
   }
   public getAuctions() {
     return this.http.get(this.url + 'auction').map(this.extractData);
@@ -161,13 +181,22 @@ export class AuctionsService {
     return this.http.get(path).map(this.extractData).debounce(() => Observable.timer(500));
   }
 
+  public updatePlayer(body: any, id) {
+    const params = JSON.stringify(body);
+    return this.http.put(this.url + 'players/' + id, params, { headers: this.headers }).map(this.extractData);
+  }
+
   public getTeams(title: string = '') {
     let path = this.url + 'teams';
     if (title !== '') {
       path = path + '?search=' + title;
     }
-    console.log(path);
     return this.http.get(path).map(this.extractData).debounce(() => Observable.timer(500));
+  }
+
+  public addReply(body: any) {
+    const params = JSON.stringify(body);
+    return this.http.post(this.url + 'reply', params, { headers: this.headers }).map(this.extractData);
   }
 
   public resetParams() {
