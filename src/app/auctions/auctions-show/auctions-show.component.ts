@@ -55,11 +55,13 @@ export class AuctionsShowComponent implements OnInit, OnDestroy {
         this.aucService.showAuction(this.auction_id).subscribe(
           (data) => {
             this.auction = data;
-            this.aucService.getOffersByAuction(this.auction_id).subscribe(
-              (data) => {
-                this.offers = data;
-                this.timer(this.offers);
-              });
+            this.offers = data.offers;
+            this.timer(this.offers);
+            //this.aucService.getOffersByAuction(this.auction_id).subscribe(
+            //  (data) => {
+            //    this.offers = data;
+            //    this.timer(this.offers);
+            //  });
           });
       }
     );

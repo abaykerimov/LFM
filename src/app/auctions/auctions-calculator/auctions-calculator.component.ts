@@ -38,27 +38,39 @@ export class AuctionsCalculatorComponent implements OnInit {
     id: 0,
     title: ''
   };
+  public userTeam = [];
   @Output() onSubmit = new EventEmitter<any>();
   @Output() onClose = new EventEmitter<any>();
   ngOnInit() {
     this.check();
-    if (this.param) {
+    if (this.param === 'auction') {
       this.searchPlayers();
       this.searchTeams();
+    } else if (this.param === 'transfer') {
+      this.searchPlayers();
+      this.getUserTeams();
     }
   }
 
-  plus(value) {
-    value === 'skill' ? this.player.skill+=1 : this.player.age+=1;
-  };
+  public getUserTeams() {
+    this.aucService.getUserTeams(this.user.user_id).subscribe((data) => {
+      this.userTeam = data;
+    });
+  }
 
-  minus(value) {
-    value === 'skill' ? this.player.skill-=1 : this.player.age-=1;
-  };
+  protected transferType;
+  transferTypeChanged(event) {
+    this.transferType = event;
+  }
+
+  protected loanType;
+  loanTypeChanged(event) {
+    this.loanType = event;
+  }
 
   submit(form: NgForm) {
-    if (this.param) {
-      form.value.auctions_option_id = this.aucService.option.id;
+    if (this.param === 'auction') {
+      form.value.auction_option_id = this.aucService.option.id;
       form.value.description = 'Из ' + this.player.team + ' в ' + this.team.title + ' за ' + this.player.cost + ' млн.';
       form.value.player_id = this.player.id;
       form.value.team_id = this.team.id;
@@ -67,8 +79,15 @@ export class AuctionsCalculatorComponent implements OnInit {
       this.onSubmit.emit(form.value);
       form.reset();
       this.player.id = 0;
-    } else {
+    } else if(this.param === 'cost') {
       this.calculateCost(form.value);
+    } else {
+      form.value.auction_option_id = this.aucService.option.id;
+      form.value.player_id = this.player.id;
+      form.value.user_id = this.user['user_id'];
+      this.onSubmit.emit(form.value);
+      //form.reset();
+      //this.player.id = 0;
     }
   }
 
@@ -112,7 +131,6 @@ export class AuctionsCalculatorComponent implements OnInit {
         });
       }
       this.team.all = arr;
-      console.log(this.team.all);
     });
     this.search(' ');
   }
@@ -177,13 +195,23 @@ export class AuctionsCalculatorComponent implements OnInit {
     }
   }
 
-  public param: Boolean;
+  plus(value) {
+    value === 'skill' ? this.player.skill+=1 : this.player.age+=1;
+  };
+
+  minus(value) {
+    value === 'skill' ? this.player.skill-=1 : this.player.age-=1;
+  };
+
+  public param: string;
   protected check(){
     this.route.queryParams.subscribe(params => {
-      if (params['type']) {
-        this.param = false;
+      if (params['type'] === 'cost') {
+        this.param = 'cost';
+      } else if(params['type'] === 'transfer') {
+        this.param = 'transfer';
       } else {
-        this.param = true;
+        this.param = 'auction';
       }
     });
   }

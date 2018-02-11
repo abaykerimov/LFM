@@ -116,6 +116,10 @@ export class AuctionsService {
   public getUserBookmarks(id) {
     return this.http.get(this.url + 'bookmarks/' + id).map(this.extractData);
   }
+
+  public getUserTeams(id: any) {
+    return this.http.get(this.url + 'teams/' + id).map(this.extractData);
+  }
   public getOffersByAuction(id: any) {
     return this.http.get(this.url + 'offer/' + id).map(this.extractData);
   }

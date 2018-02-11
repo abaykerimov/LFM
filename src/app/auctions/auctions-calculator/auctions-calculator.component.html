@@ -1,7 +1,7 @@
 <button *ngIf="param === false" class="btn btn-default" (click)="goBack()"><i class="glyphicon glyphicon-arrow-left"></i>Назад</button>
 
 <form #form="ngForm" (ngSubmit)="submit(form)" class="form-horizontal">
-  <fieldset *ngIf="param === true">
+  <fieldset *ngIf="param === 'auction' || param === 'transfer'">
     <div class="form-group">
       <label class="col-md-2 control-label" for="player-title">Игрок</label>
       <div class="col-md-10">
@@ -34,6 +34,9 @@
         <p class="col-md-10 info" [innerHTML]="player.cost + ' млн.'"></p>
       </div>
     </div>
+  </fieldset>
+
+  <fieldset *ngIf="param === 'auction'">
     <div class="form-group">
       <label class="col-md-2 control-label" for="team-title">Ваш клуб</label>
       <div class="col-md-10">
@@ -50,7 +53,66 @@
     </div>
   </fieldset>
 
-  <fieldset class="calculator" *ngIf="param === false">
+  <fieldset *ngIf="param === 'transfer'">
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="team-title">Ваш клуб</label>
+      <div class="col-md-10">
+        <select id="team-title" *ngIf="userTeam.length > 1" class="form-control" name="team_id" ngModel required>
+          <option *ngFor="let team of userTeam" value="{{ team.id }}">{{ team.title }}</option>
+        </select>
+        <p style="margin-top: 7px; font-weight: 700;" *ngIf="userTeam.length === 1">{{ userTeam[0].title }}</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="player-cost">Укажите сумму</label>
+      <div class="col-md-10">
+        <input id="player-cost" class="form-control" name="cost" ngModel required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="transfer-type">Тип перехода</label>
+      <div class="col-md-10">
+        <select id="transfer-type" class="form-control" name="transfer_type" ngModel required (ngModelChange)="transferTypeChanged($event)">
+          <option value="1">трансфер</option>
+          <option value="0">аренда</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" *ngIf="transferType === '0'">
+      <label class="col-md-2 control-label" for="loan-type">Тип аренды</label>
+      <div class="col-md-10">
+        <select id="loan-type" class="form-control" name="loan_type" ngModel required (ngModelChange)="loanTypeChanged($event)">
+          <option value="1">с правом выкупа</option>
+          <option value="0">без права выкупа</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" *ngIf="loanType === '1'">
+      <label class="col-md-2 control-label" for="loan-cost">Укажите сумму права выкупа</label>
+      <div class="col-md-10">
+        <input id="loan-cost" class="form-control" name="loan_cost" ngModel required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="description">Дополнительные опции трансфера/аренды</label>
+      <div class="col-md-10">
+        <textarea id="description" class="form-control" name="description" ngModel></textarea>
+      </div>
+    </div>
+
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" [disabled]="!form.valid">Сделать трансфер</button>
+      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="hide(form)">Закрыть</button>
+    </div>
+  </fieldset>
+
+  <fieldset class="calculator" *ngIf="param === 'cost'">
     <div class="form-group">
       <label class="col-lg-4 control-label">Стоимость: </label>
 

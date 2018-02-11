@@ -13,6 +13,7 @@ import * as $ from 'jquery';
 import {CoreModule} from "./core/core.module";
 import {AlertModule, ModalModule} from "ngx-bootstrap";
 import {TeamModule} from "./team/team.module";
+import {TransfersModule} from "./transfers/transfers.module";
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import {TeamModule} from "./team/team.module";
     JsonpModule,
     AuctionsModule,
     TeamModule,
+    TransfersModule,
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules }),
     CoreModule,
     ModalModule.forRoot(),

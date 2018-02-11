@@ -19,7 +19,7 @@ export class UserService {
     user_id: 0,
     auth_key: '',
     api_result: '',
-    viewer_type: 0,
+    viewer_type: '',
     app_secret: 'oDzC4j9aIJlA0O1s3yUp' /* ПОМЕНЯТЬ ПОТОМ! */
   };
 
@@ -36,6 +36,7 @@ export class UserService {
       params => {
         if (!params['type']) {
           if (Object.keys(params).length !== 0) {
+            console.log(params);
             this.vk.app_id = params['api_id'];
             this.vk.user_id = params['viewer_id'];
             this.vk.auth_key = params['auth_key'];
@@ -53,16 +54,8 @@ export class UserService {
         this.getUser(this.vk).subscribe(data => {
           if (Object.keys(data).length === 0) {
             this.user = JSON.parse(this.vk.api_result);
-            console.log(this.user.response);
+            console.log(this.vk.api_result);
             this.addUserToDB(this.user.response[0]);
-            // this.getVKUser(this.vk).subscribe(data => {
-            //   this.user = data.response[0];
-            //   if (Object.keys(this.user).length !== 0) {
-            //     this.addUserToDB(this.user);
-            //   }
-            // });
-          } else {
-            this.user = data;
           }
         });
         // this.checkUser(this.vk);

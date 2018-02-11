@@ -1,0 +1,43 @@
+<div class="container">
+  <button class="btn btn-success" (click)="openModal()">Сделать трансфер</button><br>
+
+  <!--<div class="col-md-8 col-md-offset-2 transfers">-->
+    <!--<ul class="nav nav-tabs">-->
+      <!--<li style="width: 50%; text-align: center" class="active"><a data-toggle="tab" href="#team_{{ team.id }}">Мои трансферы</a></li>-->
+      <!--<li style="width: 50%; text-align: center"><a data-toggle="tab" href="#team_{{ team.id }}">Все трансферы</a></li>-->
+    <!--</ul>-->
+    <!--<br>-->
+    <!--<div class="tab-content">-->
+      <!--<div *ngFor="let team of userTeam" id="team_{{ team.id }}" [ngClass]="team.pivot.is_main === 1 ? 'tab-pane fade in active' : 'tab-pane fade in'">-->
+        <!--<table class="table table-striped">-->
+          <!--<tbody>-->
+          <!--<tr *ngFor="let player of team.players">-->
+            <!--<td width="44px;"><img width="44px;" src="{{player.avatar}}" alt="{{player.title}}" onError="this.src='https://cdn.sofifa.org/player.png'"></td>-->
+            <!--<td><a href="https://sofifa.com/player/{{player.id}}?v=18&e=158991&set=true" target="_blank"><span>{{player.title}}</span></a></td>-->
+            <!--<td><span>{{player.position}}</span></td>-->
+            <!--<td><span>{{moment(player.date_of_birth).format('DD.MM.YYYY')}}</span></td>-->
+          <!--</tr>-->
+          <!--</tbody>-->
+        <!--</table>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+</div>
+
+<div bsModal #addModal="bs-modal" id="addModal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="addTransferModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title pull-left">Укажите игрока и клуб</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="addModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <auctions-calculator (onSubmit)="save($event)" (onClose)="addModal.hide()"></auctions-calculator>
+      </div>
+    </div>
+  </div>
+</div>

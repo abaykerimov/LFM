@@ -1,0 +1,26 @@
+
+
+<div class="container">
+  <div class="col-md-8 col-md-offset-2">
+    <ul class="nav nav-tabs">
+      <li style="width: 50%; text-align: center" *ngFor="let team of data" [ngClass]="team.pivot.is_main === 1 ? 'active' : ''"><a data-toggle="tab" href="#team_{{ team.id }}">{{ team.title }}</a></li>
+    </ul>
+    <br>
+    <div class="tab-content">
+      <div *ngFor="let team of data" id="team_{{ team.id }}" [ngClass]="team.pivot.is_main === 1 ? 'tab-pane fade in active' : 'tab-pane fade in'">
+        <table class="table table-striped">
+          <tbody>
+          <tr *ngFor="let player of team.players">
+            <td width="44px;"><img width="44px;" src="{{player.avatar}}" alt="{{player.title}}" onError="this.src='https://cdn.sofifa.org/player.png'"></td>
+            <td><a href="https://sofifa.com/player/{{player.id}}?v=18&e=158991&set=true" target="_blank"><span>{{player.title}}</span></a></td>
+            <td><span>{{player.position}}</span></td>
+            <td><span>{{player.skill}}</span></td>
+            <td><span>{{moment(player.date_of_birth).format('DD.MM.YYYY')}}</span></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
