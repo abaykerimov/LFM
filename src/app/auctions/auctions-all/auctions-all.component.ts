@@ -36,9 +36,7 @@ export class AuctionsAllComponent implements OnInit, OnDestroy {
   public offerBroadcast() {
     this.aucService.echoSub.channel('offers')
       .listen('.offer', (data) => {
-
-        // console.log(data);
-        this.aucService.showAuction(data.offer.auction_id).subscribe(value => {
+          this.aucService.showAuction(data.offer.auction_id).subscribe(value => {
           if (Number(this.user.user_id) === Number(value.user_id)) {
             if (Number(value.user_id) !== Number(data.offer.user_id)) {
               this.notification.sendNotification('На ваш аукцион напали!', {

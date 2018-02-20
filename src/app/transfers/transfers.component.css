@@ -1,3 +1,11 @@
 .transfers {
     margin-top: 30px;
 }
+
+.accepted {
+    background: #7fea9f !important;
+}
+
+.rejected {
+    background: #ffb8b3 !important;
+}

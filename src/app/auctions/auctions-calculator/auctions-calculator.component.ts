@@ -86,8 +86,8 @@ export class AuctionsCalculatorComponent implements OnInit {
       form.value.player_id = this.player.id;
       form.value.user_id = this.user['user_id'];
       this.onSubmit.emit(form.value);
-      //form.reset();
-      //this.player.id = 0;
+      form.reset();
+      this.player.id = 0;
     }
   }
 

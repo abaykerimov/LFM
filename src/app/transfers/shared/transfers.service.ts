@@ -8,6 +8,7 @@ import {Subject} from 'rxjs/Subject';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import {ActivatedRoute, Router} from '@angular/router';
 import {env} from "../../../.env";
+import {LaravelEchoService} from "../../core/laravel-echo.service"
 
 @Injectable()
 export class TransfersService {
@@ -23,8 +24,10 @@ export class TransfersService {
   private stateParams = {};
 
   private updateData = new Subject<boolean>();
+  public echoSub;
 
-  constructor(private http: Http, public toastr: ToastsManager) {
+  constructor(private http: Http, public toastr: ToastsManager, protected echo: LaravelEchoService) {
+    this.connectBroadcast();
     this.url = env('apiUrl');
     this.resetParams();
     this.getOption().subscribe(data => {
@@ -35,6 +38,14 @@ export class TransfersService {
     /*
     * ГЛОБАЛЬНАЯ ПЕРЕМЕННАЯ - ГОД И АУКЦИОН_OPTIONS_ID
     **/
+  }
+
+  protected connectBroadcast() {
+    this.echo.echo.subscribe((echo) => {
+      if (echo) {
+        this.echoSub = echo;
+      }
+    });
   }
 
   public fetchData() {
@@ -68,8 +79,8 @@ export class TransfersService {
     return this.http.get(this.url + 'option').map(this.extractData);
   }
 
-  public getTransfers() {
-    return this.http.get(this.url + 'transfer').map(this.extractData);
+  public getTransfers(user?: number, request?: any) {
+    return this.http.get(this.url + 'transfer', {params: {user: user, is_request: request}}).map(this.extractData);
   }
 
   public getUserTeams(id: any) {

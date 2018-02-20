@@ -3,7 +3,7 @@
   <hr>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <img src="{{auction.player.avatar}}" class="img-responsive avatar" style="margin-top: -96px;">
+      <img src="{{auction.player.avatar}}" class="img-responsive avatar" style="margin-top: -96px;" onError="this.src='https://cdn.sofifa.org/player.png'">
       <div class="auction-info">
         <p><i class="glyphicon glyphicon-user"></i><a href="https://sofifa.com/player/{{auction.player['player_id']}}?v=18&e=158991&set=true" target="_blank">{{auction.player.title}}</a></p>
         <p><i class="glyphicon glyphicon glyphicon-knight"></i>{{auction.player.position}}</p>

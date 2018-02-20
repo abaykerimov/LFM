@@ -65,19 +65,19 @@
     </div>
 
     <div class="form-group">
-      <label class="col-md-2 control-label" for="player-cost">Укажите сумму</label>
-      <div class="col-md-10">
-        <input id="player-cost" class="form-control" name="cost" ngModel required>
-      </div>
-    </div>
-
-    <div class="form-group">
       <label class="col-md-2 control-label" for="transfer-type">Тип перехода</label>
       <div class="col-md-10">
         <select id="transfer-type" class="form-control" name="transfer_type" ngModel required (ngModelChange)="transferTypeChanged($event)">
           <option value="1">трансфер</option>
           <option value="0">аренда</option>
         </select>
+      </div>
+    </div>
+
+    <div class="form-group" *ngIf="transferType === '1'">
+      <label class="col-md-2 control-label" for="player-cost">Укажите сумму</label>
+      <div class="col-md-10">
+        <input id="player-cost" class="form-control" name="cost" ngModel required>
       </div>
     </div>
 
@@ -91,7 +91,7 @@
       </div>
     </div>
 
-    <div class="form-group" *ngIf="loanType === '1'">
+    <div class="form-group" *ngIf="loanType === '1' && transferType === '0'">
       <label class="col-md-2 control-label" for="loan-cost">Укажите сумму права выкупа</label>
       <div class="col-md-10">
         <input id="loan-cost" class="form-control" name="loan_cost" ngModel required>

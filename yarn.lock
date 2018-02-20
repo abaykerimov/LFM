@@ -107,7 +107,7 @@
   dependencies:
     tslib "^1.7.1"
 
-"@angular/compiler-cli@^4.4.3":
+"@angular/compiler-cli@4.4.3":
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-4.4.3.tgz#183af81f141186b8d660b06429592d40b7540a4a"
   dependencies:

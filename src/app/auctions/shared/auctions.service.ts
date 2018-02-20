@@ -48,7 +48,6 @@ export class AuctionsService {
   protected connectBroadcast() {
     this.echo.echo.subscribe((echo) => {
       if (echo) {
-        console.log(echo);
         this.echoSub = echo;
       }
     });
