@@ -1,5 +1,5 @@
 import {
-  Component, OnDestroy, OnInit, ViewChild, ViewContainerRef
+  Component, OnDestroy, Input, OnInit, ViewChild, ViewContainerRef
 } from '@angular/core';
 import {TransfersService} from './shared/transfers.service';
 import * as moment from 'moment';
@@ -9,6 +9,7 @@ import {Observable} from 'rxjs/Observable';
 import {Location} from '@angular/common';
 import {ModalDirective} from 'ngx-bootstrap';
 import {LaravelEchoService} from "../core/laravel-echo.service";
+import {NotificationService} from "../core/notification.service";
 
 @Component({
   selector: 'transfers',
@@ -22,19 +23,22 @@ export class TransfersComponent implements OnInit, OnDestroy {
   public transfers = [];
   public userTransfers = [];
   public requestTransfers = [];
+  public userTeam = [];
 
   @ViewChild('addModal') public addModal: ModalDirective;
 
-  constructor(public trService: TransfersService, private vcr: ViewContainerRef, private uService: UserService, private location: Location, protected echo: LaravelEchoService) {
+  constructor(public trService: TransfersService, private vcr: ViewContainerRef, private uService: UserService, private location: Location, protected echo: LaravelEchoService, private notification: NotificationService) {
     this.trService.toastr.setRootViewContainerRef( this.vcr);
     this.user = JSON.parse(sessionStorage.getItem('curUser'));
   }
   public moment = moment;
 
   ngOnInit() {
+    this.getUserTeams();
     this.getTransfers();
     this.getUserTransfers();
     this.getRequestTransfers();
+    this.connectBroadcast();
     this.echo.subscribeToEcho();
     this.transferBroadcast();
     this.trService.onFetchData().subscribe(() => this.transferBroadcast());
@@ -42,11 +46,35 @@ export class TransfersComponent implements OnInit, OnDestroy {
 
   public transferBroadcast() {
     this.trService.echoSub.channel('transfers')
-        .listen('.transfer', (e) => {
-          this.getTransfers();
-          this.getRequestTransfers();
+        .listen('.transfer', (data) => {
+          this.trService.getTransfers(this.user.user_id, 1).subscribe((value) => {
+            if (data) {
+              for (let team of this.userTeam) {
+                if (team.id === value[0].player.team.id) {
+                  if (data.transfer.created_at === value[0].created_at) {
+                    this.notification.sendNotification('На вашего игрока оформлен трансфер!', {
+                      body: data.player_title,
+                      icon: 'http://abay.dev.kerimov.kz/public/img/transfer-icon.jpg',
+                    }, '/transfers?type=transfer/');
+                  }
+                }
+              }
+            }
+          });
           this.getUserTransfers();
+          this.getTransfers();
         });
+  }
+
+  protected connectBroadcast() {
+    this.echo.echo.subscribe((echo) => {
+      if (echo) {
+        echo.channel('transfers')
+            .listen('.transfer', (e) => {
+              console.log(e);
+            });
+      }
+    });
   }
 
   public getTransfers() {
@@ -64,6 +92,12 @@ export class TransfersComponent implements OnInit, OnDestroy {
   public getRequestTransfers() {
     this.trService.getTransfers(this.user.user_id, 1).subscribe((data) => {
       this.requestTransfers = data;
+    });
+  }
+
+  public getUserTeams() {
+    this.trService.getUserTeams(this.user.user_id).subscribe((data) => {
+      this.userTeam = data;
     });
   }
 
@@ -106,4 +140,5 @@ export class TransfersComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.trService.echoSub.leave('transfers');
   }
+
 }

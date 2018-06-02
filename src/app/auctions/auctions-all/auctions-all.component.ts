@@ -42,7 +42,7 @@ export class AuctionsAllComponent implements OnInit, OnDestroy {
               this.notification.sendNotification('На ваш аукцион напали!', {
                 body: data.offer.auction_title.replace(/<\/?[^>]+(>|$)/g, ""),
                 icon: 'http://abay.dev.kerimov.kz/public/img/180px-Krysakun_cover2.jpg',
-              }, data.offer.auction_id);
+              }, '/auctions/detail/' + data.offer.auction_id);
             }
           }
         });

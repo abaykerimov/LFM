@@ -38,7 +38,7 @@ export class AuctionsCalculatorComponent implements OnInit {
     id: 0,
     title: ''
   };
-  public userTeam = [];
+  @Input() userTeam;
   @Output() onSubmit = new EventEmitter<any>();
   @Output() onClose = new EventEmitter<any>();
   ngOnInit() {
@@ -48,14 +48,7 @@ export class AuctionsCalculatorComponent implements OnInit {
       this.searchTeams();
     } else if (this.param === 'transfer') {
       this.searchPlayers();
-      this.getUserTeams();
     }
-  }
-
-  public getUserTeams() {
-    this.aucService.getUserTeams(this.user.user_id).subscribe((data) => {
-      this.userTeam = data;
-    });
   }
 
   protected transferType;
@@ -84,6 +77,7 @@ export class AuctionsCalculatorComponent implements OnInit {
     } else {
       form.value.auction_option_id = this.aucService.option.id;
       form.value.player_id = this.player.id;
+      form.value.player_title = this.player.title;
       form.value.user_id = this.user['user_id'];
       this.onSubmit.emit(form.value);
       form.reset();
@@ -137,6 +131,7 @@ export class AuctionsCalculatorComponent implements OnInit {
   public search(value: any = '') {
     this.searchTerms.next(value);
   }
+
   public setItem(type, event) {
     if (type === 'player') {
       for (let item of this.player.all) {

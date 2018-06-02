@@ -8,19 +8,21 @@ export class NotificationService {
 
   constructor() {}
 
-  public sendNotification(title, options, auction_id) {
+  public sendNotification(title, options, link) {
     // if (!("Notification" in window)) {
     //   alert('Ваш браузер не поддерживает HTML Notifications, его необходимо обновить.');
     // }
 
     Notification.requestPermission(permission => {
+      console.log(permission);
+
       if (permission === "granted") {
         let notification = new Notification(title, options);
         notification.onclick = () => {
-          window.location.href = '/auctions/detail/' + auction_id
+          window.location.href = link
         };
       } else {
-        alert('Вы запретили показывать уведомления');
+        Notification.requestPermission();
       }
     });
   }

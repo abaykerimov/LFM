@@ -108,7 +108,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <auctions-calculator (onSubmit)="save($event)" (onClose)="addModal.hide()"></auctions-calculator>
+        <auctions-calculator [userTeam]="userTeam" (onSubmit)="save($event)" (onClose)="addModal.hide()"></auctions-calculator>
       </div>
     </div>
   </div>
